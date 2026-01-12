@@ -19,7 +19,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Users sign on to respond to the set daily prompt and read the different takes their friends had on the exact same prompt. Each user can increase their author score by keeping up a daily streak and completing randomized daily achievements unique to them. These include using a specific word, exceeding a certain word count, writing in different tenses, and more! 
+This application is the cure to writer's block! Bookworms supplies a daily creative writing prompt to help you build a habit of practicing writing daily. What's more, you can find inspiration in friend's responses to the same prompt but with their own spin. Each user can increase their author score by keeping up a daily streak and completing randomized daily achievements unique to them. These acheivements ensure that each prompt response has it's own spin with takes including using a specific word, exceeding a certain word count, writing in different tenses, and more! As reponses pile up, you can connect with your friends by leaving reactions and comments to encourage originality, creativity, and excellence among your very own group of bookworms. 
 
 ### Design
 
