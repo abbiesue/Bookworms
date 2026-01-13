@@ -23,15 +23,20 @@ This application is the cure to writer's block! Bookworms supplies a daily creat
 
 ### Design
 
+Here is the skeleton design concept for the three main pages of the application: the prompt page before publishing, the prompt page after publishing, and the profile page accessed by clicking the profile name at the top of the prompt page. 
 ![Design image](BookwormsSkeletonDesign.jpg)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Here are the sequence diagrams for publishing prompt responses and interacting with others' responses.
 
 ```mermaid
 sequenceDiagram
     actor You
+    actor Alice
+    actor Bob
     actor Website
-    You->>Website: Replace this with your design
+    You->>Website: You wrote "..."
+    Alice->>Website: Alice wrote "..."
+    You<<--Website: Alice wrote "..."
 ```
 
 ### Key features
