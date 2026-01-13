@@ -44,6 +44,21 @@ sequenceDiagram
     Website-->>Charlie: Bob wrote"..."
     Website-->>Alice: Bob wrote"..."
 ```
+This sequence diagram maps friend interactions after publishing. Each reaction and comment is visible to the response author and their friends.
+
+```mermaid
+sequenceDiagram
+    actor Charlie
+    actor Alice
+    actor Bob
+    actor Website
+    Charlie->>Website: Charlie reacted with 'heart' to Bob
+    Website-->>Alice: Charlie reacted with 'heart' to Bob
+    Website-->>Bob: Charlie reacted with 'heart' to Bob
+    Bob->>Website: Bob commented "..." to Alice
+    Website-->>Charlie: Bob commented "..." to Alice
+    Website-->>Alice: Bob commented "..." to Alice
+```
 
 ### Key features
 
