@@ -36,7 +36,7 @@ sequenceDiagram
     actor Website
     You->>Website: You wrote "..."
     Alice->>Website: Alice wrote "..."
-    You<<--Website: Alice wrote "..."
+    You<--Website: Alice wrote "..."
 ```
 
 ### Key features
