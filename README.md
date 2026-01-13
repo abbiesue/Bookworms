@@ -26,17 +26,23 @@ This application is the cure to writer's block! Bookworms supplies a daily creat
 Here is the skeleton design concept for the three main pages of the application: the prompt page before publishing, the prompt page after publishing, and the profile page accessed by clicking the profile name at the top of the prompt page. 
 ![Design image](BookwormsSkeletonDesign.jpg)
 
-Here are the sequence diagrams for publishing prompt responses and interacting with others' responses.
+Here is the sequence diagram for publishing prompt responses. As each user publishes, all friend responses previously published become visible, and their feed updates with each new response. 
 
 ```mermaid
 sequenceDiagram
-    actor You
+    actor Charlie
     actor Alice
     actor Bob
     actor Website
-    You->>Website: You wrote "..."
+    Charlie->>Website: Charlie wrote "..."
     Alice->>Website: Alice wrote "..."
-    You<--Website: Alice wrote "..."
+    Website-->>Alice: Charlie wrote "..."
+    Website-->>Charlie: Alice wrote "..."
+    Bob->>Website: Bob wrote"..."
+    Website-->>Bob: Charlie wrote "..."
+    Website-->>Bob: Alice wrote "..."
+    Website-->>Charlie: Bob wrote"..."
+    Website-->>Alice: Bob wrote"..."
 ```
 
 ### Key features
