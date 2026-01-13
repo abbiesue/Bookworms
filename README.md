@@ -6,16 +6,13 @@ A daily prompt application to encourage creative writing and beat writers block!
 
 ## 🚀 Specification Deliverable
 
-> [!NOTE]
-> Fill in this sections as the submission artifact for this deliverable. You can refer to this [example](https://github.com/webprogramming260/startup-example/blob/main/README.md) for inspiration.
-
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
+- [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
@@ -73,12 +70,18 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Uses correct HTML structure and organization. There are are four Four HTML pages. One respectively for login, prompt publishing and interaction, profile management, and friend management. Hyperlinks exist to connect the artifacts. 
+- **CSS** - Uses CSS for aethetic styling that looks good on several screen sizes and orientations. It will use whitespace and color contrast properly to make app usage intuitive.
+- **React** - React will be used to connect components for logging in, publishing responses, interacting with other responses, and opening profile management. 
+- **Service** - The service with handle endpoints for:
+    - logging in and out
+    - publishing responses and interactions
+    - retrieving friend responses and interactions
+    - retrieving streak value
+    - updating friends list
+    - retrieving and updating author score
+- **DB/Login** - The Database will store user authentification and profiles, previous prompt responses, author level, friends list, and daily bonus completion. 
+- **WebSocket** - Websocket will handle real time updates, such as daily prompt responses and friend interactions. 
 
 ## 🚀 AWS deliverable
 
