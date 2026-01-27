@@ -33,10 +33,21 @@ body {
     margin: 0;
 }
 
+.bannerImage {
+    width: 80px;
+    margin: 0;
+}
+
 header {
-    margin-top: 0;
+    background-color: var(--light-pink);
+    margin-bottom: 0;
+}
+
+.banner {
+    margin: 0;
     padding: 0;
-    background-color: var(--black-green);
+    background-color: var(--dark-green);
+    color: var(--dark-pink);
 }
 
 a {text-decoration: none;}
