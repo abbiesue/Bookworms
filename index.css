@@ -1,0 +1,16 @@
+:root {
+    --dark-green: #2c4938;
+    --medium-green: #436e55;
+    --light-green: #73996e;
+    --dark-pink: #a03451;
+    --medium-pink: #da6d8d;
+    --light-pink: #f8dbda;
+    --black-green: #08100c;
+    --black-pink: #110609;
+    --white-green: #ebf9ea;
+}
+
+body {
+    background-color: var(--black-green);
+    color: var(--white-green);
+}
