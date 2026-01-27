@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <style>
+    #expandedContent {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    #expandToggle:checked ~ #expandedContent {
+        display: block;
+        text-align: center;
+        max-height: 500px; /* Adjust based on content */
+    }
+
     .profileContainer{
         max-width: 800px;
         margin: 0 auto;
@@ -100,7 +113,16 @@
                 </div>
             </div>
         </div>
-
+        <div style="border: 2px solid #f55472; width: 98%; text-align: center; background-color: rgb(245, 200, 206);">
+            <h3>
+                ~Prompt Archive~
+            </h3>
+            <input type="checkbox" id="expandToggle" hidden>
+            <label for="expandToggle">⬇Click to Expand Archive⬇</label>
+            <div id="expandedContent">
+                This is where the prompts stored in the database would populate
+            </div>
+        </div>
     </main>
 
     <footer>
