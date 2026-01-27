@@ -11,6 +11,10 @@
 }
 
 body {
-    background-color: var(--black-green);
+    background-color: var(--dark-green);
     color: var(--white-green);
 }
+
+a:link {color: var(--light-pink)}
+a:visited {color: var(--dark-pink)}
+a:hover {color:var(--medium-pink)}
