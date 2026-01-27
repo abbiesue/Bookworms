@@ -87,21 +87,21 @@ I am going to use the required technologies in the following ways.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Server deployed and accessible with custom domain name** - [My server link](https://yourdomainnamehere.click).
+- [x] **Server deployed and accessible with custom domain name** - [My server link](https://bookwormprompts.com).
 
 ## 🚀 HTML deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I created five html pages, including an index file for the default page, a prompt response page, friend feed page, about page, and profile page.
+- [x] **Proper HTML element usage** - I used many div elements, but also explored with spans, lists, links, images, and checklists to make a more interactive environment.
+- [x] **Links** - Every page includes navigation links to all other pages for easy traversal, though the navigation tree will be removed from the login page after authentification is working.
+- [x] **Text** - I included text for element desciptions including the prompt, responses, author level, bonus options, etc.
+- [x] **3rd party API placeholder** - Placeholder for the API that will handle random prompt and bonus generation.
+- [x] **Images** - I included an image placeholder for a profile image.
+- [x] **Login placeholder** - index.html holds the login placeholder.
+- [x] **DB data placeholder** - The feed.html page holds placeholders for prompt responses which will be fetched from the database, as well as the author level, bonus progress, and previous prompts on the profile page. 
+- [x] **WebSocket placeholder** - The feed page holds mock responses which would be populated on the page as other users posted responses. 
 
 ## 🚀 CSS deliverable
 
