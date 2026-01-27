@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    #expandedContent {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    #expandToggle:checked ~ #expandedContent {
+        display: block;
+        text-align: center;
+        max-height: 500px; /* Adjust based on content */
+    }
+
+    .textContainer {
+        width: 98%;
+        font-style: italic;
+        font-weight: bold;
+        color: rgb(62, 60, 60);
+    }
+
+    .fullText {
+        font-style: normal;
+        font-weight: normal;
+        color:rgb(110, 98, 98)
+    }
+
+    .likeButton label::before {
+        content: "🩷 Like";
+    }
+
+    .likeButton input[type="checkbox"]:checked + label::before {
+        content: "💗 Liked";
+    }
+
+    .likeButton input[type="checkbox"] {
+        display: none;
+    }
+
+    .laughButton label::before {
+        content: "😂 Laugh";
+    }
+
+    .laughButton input[type="checkbox"]:checked + label::before {
+        content: "🤣 Laughed";
+    }
+
+    .laughButton input[type="checkbox"] {
+        display: none;
+    }
+
+    .cryButton label::before {
+        content: "😢 Cry";
+    }
+
+    .cryButton input[type="checkbox"]:checked + label::before {
+        content: "😭 Cried";
+    }
+
+    .cryButton input[type="checkbox"] {
+        display: none;
+    }    
+    
+    .commentButton {
+        position: relative;
+    }
+    
+    .commentButton input[type="checkbox"] {
+        display: none;
+    }
+    
+    .commentButton label {
+        cursor: pointer;
+        padding: 10px 20px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .commentButton label:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .commentButton label::before {
+        content: "💬 Critiques";
+    }
+    
+    .commentButton input[type="checkbox"]:checked ~ .commentSection {
+        display: block;
+    }
+    
+    .commentSection {
+        display: none;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .comment {
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: white;
+        border-left: 3px solid #f55472;
+        border-radius: 3px;
+    }
+    
+    .commentText {
+        color: #666;
+    }
+    
+    .commentInput {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: rgb(245, 200, 206);
+        font-family: inherit;
+        resize: vertical;
+    }
+    
+    .submitComment {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #f55472;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Tell browsers not to scale the viewport automatically -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookworms HTML</title>
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <header>
+        <h1>🪱🪱🪱Bookworms🪱🪱🪱</h1>
+        <p> These navigation elements will be removed in the future. For now, let's keep things simple!</p>
+        <nav>
+            <menu>
+                <li><a href= "index.html">Home</a></li>
+                <li><a href="prompts.html">Prompt</a></li>
+                <li><a href= "feed.html">Response Feed</a></li>
+                <li><a href= "profile.html">Profile</a></li>
+                <li><a href= "about.html">About</a></li>
+            </menu>
+        </nav>
+    </header>
+    
+    <main>
+        <div style="border: 2px solid black; width: 98%; text-align: center; background-color: darkgrey;">
+            <h2>
+            ~Daily Prompt~
+        </h2>
+            <input type="checkbox" id="expandToggle" hidden>
+            <label for="expandToggle">⬇Click to Reveal Prompt⬇</label>
+            <div id="expandedContent">
+            "Two friends realize they are characters in a comic; one is the hero, one the villain..."
+            </div>
+        </div>
+        <p> This is a mock up of how the feed might look, but it will update with responses and reactions real time. </p>
+        <div style="border: 2px solid rgb(226, 222, 222); background-color: rgb(226, 222, 222);"> 
+            <span style="border: 1px solid gray; background-color: gray;">You</span> wrote:
+            <div class="textContainer">
+                <details>
+                    <summary>
+                        "No one could have prepared me for the day I had to kill..."
+                    </summary>
+                    <div class="fullText"> No one could have prepared me for the day I had to kill my best friend. Wow this is so insightful and tragic and awesome. Aren't I a good writer?</div>
+                </details>
+            </div>
+            <div>
+                <span class="likeButton">
+                    <input type="checkbox" id="like1">
+                    <label for="like1"></label>
+                </span> 
+                <span class="laughButton">
+                    <input type="checkbox" id="laugh1">
+                    <label for="laugh1"></label>
+                </span>
+                <span class="cryButton">
+                    <input type="checkbox" id="cry1">
+                    <label for="cry1"></label>
+                </span>
+                <span class="commentButton">
+                    <input type="checkbox" id="comment1">
+                    <label for="comment1"></label>
+                    
+                    <div class="commentSection">
+                        <div class="existingComments">
+                            <h4>Comments:</h4>
+                            
+                            <div class="comment">
+                                <div class="commentAuthor">Mia_writes</div>
+                                <div class="commentText">I'm so impressed!</div>
+                            </div>
+                            
+                            <div class="comment">
+                                <div class="commentAuthor">Tomatoe505</div>
+                                <div class="commentText">fr fr I cried</div>
+                            </div>
+                        </div>
+                        
+                        <div class="addComment">
+                            <h4>Add a comment:</h4>
+                            <textarea class="commentInput" rows="3" placeholder="Write your comment here..."></textarea>
+                            <button class="submitComment">Post Comment</button>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div style="border: 4px solid white"></div>
+        <div style="border: 2px solid rgb(226, 222, 222); background-color: rgb(226, 222, 222);"> 
+            <span style="border: 1px solid gray; background-color: gray;">Mia_writes</span> wrote:
+            <div class="textContainer">
+                <details>
+                    <summary>
+                        "'Don't do it,' he pleaded."
+                    </summary>
+                    <div class="fullText"> "Don't do it," he pleaded. <p>"This is the way," I, the mandolorian replied. Thankfully my super awesome mask covered my tears as I raised the blaster. "So long, friend."</p>
+                    </div>
+                </details>
+            </div>
+            <div>
+                <span class="likeButton">
+                    <input type="checkbox" id="like1">
+                    <label for="like1"></label>
+                </span> 
+                <span class="laughButton">
+                    <input type="checkbox" id="laugh1">
+                    <label for="laugh1"></label>
+                </span>
+                <span class="cryButton">
+                    <input type="checkbox" id="cry1">
+                    <label for="cry1"></label>
+                </span>
+                <span>
+                    💬 Critiques
+                </span>
+            </div>
+        </div>
+        <div style="border: 4px solid white"></div>
+        <div style="border: 2px solid rgb(226, 222, 222); background-color: rgb(226, 222, 222);"> 
+            <span style="border: 1px solid gray; background-color: gray;">Tomatoe505</span> wrote:
+            <div class="textContainer">
+                <details>
+                    <summary>
+                        "Hey guys, I'm trying to keep my streak lol"
+                    </summary>
+                    <div class="fullText">Hey guys, I'm trying to keep my streak lol. I'll be serious about it tomorrow. Leave a like if you're watching the game tonight.</p>
+                    </div>
+                </details>
+            </div>
+            <div>
+                <span class="likeButton">
+                    <input type="checkbox" id="like1">
+                    <label for="like1"></label>
+                </span> 
+                <span class="laughButton">
+                    <input type="checkbox" id="laugh1">
+                    <label for="laugh1"></label>
+                </span>
+                <span class="cryButton">
+                    <input type="checkbox" id="cry1">
+                    <label for="cry1"></label>
+                </span>
+                <span>
+                    💬 Critiques
+                </span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+      <hr />
+      <span class="text-reset">Abigail Peterson</span>
+      <br />
+      <a href="https://github.com/abbiesue/Bookworms">GitHub</a>
+    </footer>
+
+  </body>
+</html>
