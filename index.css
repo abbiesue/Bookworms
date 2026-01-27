@@ -27,11 +27,39 @@
 }
 
 body {
-    background-color: var(--white-green);
-    color: var(--black-green);
+    background-color: var(--medium-green);
+    color: var(--dark-green);
     font-family: "Quicksand", sans-serif;
+    margin: 0;
 }
 
+a {text-decoration: none;}
 a:link {color: var(--medium-pink)}
-a:visited {color: var(--dark-pink)}
-a:hover {color:var(--light-pink)}
+a:visited {color: var(--black-pink)}
+a:hover {color:var(--dark-pink)}
+
+nav {
+    border: var(--white-green) solid;
+    background-color: var(--white-green);
+    display: flex;
+    width: 100%;
+}
+
+menu {
+    display: flex;
+    margin: 10px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    gap: 10px;
+    padding: 0;
+    width: 100%;
+}
+
+.navButton {
+    flex: 1;
+    border: var(--light-pink) solid;
+    border-radius: 5px;
+    background-color: var(--light-pink);
+    padding: 5px;
+    text-align: center;
+}
