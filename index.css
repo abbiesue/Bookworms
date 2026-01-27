@@ -33,6 +33,12 @@ body {
     margin: 0;
 }
 
+header {
+    margin-top: 0;
+    padding: 0;
+    background-color: var(--black-green);
+}
+
 a {text-decoration: none;}
 a:link {color: var(--medium-pink)}
 a:visited {color: var(--black-pink)}
