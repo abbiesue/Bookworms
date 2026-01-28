@@ -55,11 +55,6 @@ header {
     padding: 0;
 }
 
-a {text-decoration: none;}
-a:link {color: var(--dark-green)}
-a:visited {color: var(--dark-green)}
-a:hover {color:var(--dark-pink)}
-
 nav {
     border: var(--medium-green) solid;
     background-color: var(--medium-green);
@@ -75,6 +70,7 @@ menu {
 }
 
 .navButton {
+    text-decoration: none;
     flex: 1;
     border: var(--light-green) solid;
     border-radius: 5px;
@@ -83,7 +79,20 @@ menu {
     text-align: center;
 }
 
+.navButton:link {
+    color: var(--dark-green)
+}
+
+.navButton:link {
+    color: var(--dark-green)
+}
+
 .navButton:hover {
     background-color: var(--light-pink);
     border: var(--light-pink) solid;
+    color: var(--dark-pink)
 }
+
+
+
+

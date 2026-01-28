@@ -5,19 +5,22 @@
     <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookworms HTML</title>
-    <link rel="icon" href="favicon.ico" />
+    <link rel="icon" href="bookwormIconFinal.ico" />
+    <link rel="stylesheet" href="foundation.css"> 
   </head>
   <body>
     <header>
-        <h1>🪱🪱🪱Bookworms🪱🪱🪱</h1>
-        <p> These navigation elements will be removed in the future. For now, let's keep things simple!</p>
+        <h1 class="banner">
+          <img class="bannerImage" src="bannerBookworm.jpg" alt="Bookworms Banner">
+          <span>Bookworms</span>
+        </h1>
         <nav>
             <menu>
-                <li><a href= "index.html">Home</a></li>
-                <li><a href="prompts.html">Prompt</a></li>
-                <li><a href= "feed.html">Response Feed</a></li>
-                <li><a href= "profile.html">Profile</a></li>
-                <li><a href= "about.html">About</a></li>
+              <flex><a class="navButton" href= "index.html">Home</a></flex>
+              <flex><a class="navButton" href="prompts.html">Prompt</a></flex>
+              <flex><a class="navButton" href= "feed.html">Response Feed</a></flex>
+              <flex><a class="navButton" href= "profile.html">Profile</a></flex>
+              <flex><a class="navButton" href= "about.html">About</a></flex>
             </menu>
         </nav>
     </header>
