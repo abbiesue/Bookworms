@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookworms HTML</title>
     <link rel="icon" href="bookwormIconFinal.ico" />
-    <link rel="stylesheet" href="foundation.css">   
+    <link rel="stylesheet" href="foundation.css">  
+    <link rel="stylesheet" href="index.css">  
   </head>
   <body>
     <header>
@@ -16,30 +17,33 @@
         </h1>
         <nav>
             <menu>
-              <flex><a class="navButton" href= "index.html">Home</a></flex>
-              <flex><a class="navButton" href="prompts.html">Prompt</a></flex>
-              <flex><a class="navButton" href= "feed.html">Response Feed</a></flex>
-              <flex><a class="navButton" href= "profile.html">Profile</a></flex>
-              <flex><a class="navButton" href= "about.html">About</a></flex>
+              <flex class="navButtonContainer"><a class="navButton" href= "index.html">Home</a></flex>
+              <flex class="navButtonContainer"><a class="navButton" href="prompts.html">Prompt</a></flex>
+              <flex class="navButtonContainer"><a class="navButton" href= "feed.html">Response Feed</a></flex>
+              <flex class="navButtonContainer"><a class="navButton" href= "profile.html">Profile</a></flex>
+              <flex class="navButtonContainer"><a class="navButton" href= "about.html">About</a></flex>
             </menu>
         </nav>
     </header>
     
     <main>
       <h1>Welcome to Bookworms!</h1>
-      <h2>Login to get started:</h2>
-      <form method="get" action="prompts.html">
-        <div>
-          <span>@</span>
-          <input type="text" placeholder="your@email.com" />
-        </div>
-        <div>
-          <span>🔒</span>
-          <input type="password" placeholder="password" />
-        </div>
-        <button type="submit">Login</button>
-        <button type="submit">Create</button>
-      </form>
+      <div class="loginPrompt">
+        <h2>Log in to get started:</h2>
+        <form method="get" action="prompts.html">
+          <div>
+            <span>email:</span>
+            <input type="text" placeholder="your@email.com" />
+          </div>
+          <div>
+            <span>password</span>
+            <input type="password" placeholder="password" />
+          </div>
+          <button type="submit">Login</button>
+          <button type="submit">Create</button>
+        </form>
+      </div>
+
     </main>
 
     <footer>

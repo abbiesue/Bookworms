@@ -31,6 +31,17 @@ body {
     color: var(--dark-green);
     font-family: "Quicksand", sans-serif;
     margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; 
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-bottom: 20px;
 }
 
 .bannerImage {
@@ -71,16 +82,12 @@ menu {
 
 .navButton {
     text-decoration: none;
-    flex: 1;
     border: var(--light-green) solid;
     border-radius: 5px;
     background-color: var(--light-green);
     padding: 5px;
     text-align: center;
-}
-
-.navButton:link {
-    color: var(--dark-green)
+    transition: all 0.3s ease;
 }
 
 .navButton:link {
@@ -90,9 +97,24 @@ menu {
 .navButton:hover {
     background-color: var(--light-pink);
     border: var(--light-pink) solid;
+    color: var(--dark-pink);
+    transform: scale(1.05);
+}
+
+.navButtonContainer {
+    transition: all 0.3s ease;
+}
+
+.navButtonContainer:hover {
+    transform: scale(1.05);
+}
+
+a {
     color: var(--dark-pink)
 }
 
-
+a:hover {
+    color: var(--medium-pink)
+}
 
 
