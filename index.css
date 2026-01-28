@@ -27,7 +27,7 @@
 }
 
 body {
-    background-color: var(--light-green);
+    background-color: var(--white-green);
     color: var(--dark-green);
     font-family: "Quicksand", sans-serif;
     margin: 0;
@@ -47,7 +47,7 @@ header {
     margin: 0;
     padding: 0;
     background-color: var(--dark-green);
-    color: var(--dark-pink);
+    color: var(--medium-green);
 }
 
 .banner h1 {
@@ -56,32 +56,34 @@ header {
 }
 
 a {text-decoration: none;}
-a:link {color: var(--medium-pink)}
-a:visited {color: var(--black-pink)}
+a:link {color: var(--dark-green)}
+a:visited {color: var(--dark-green)}
 a:hover {color:var(--dark-pink)}
 
 nav {
-    border: var(--white-green) solid;
-    background-color: var(--white-green);
+    border: var(--medium-green) solid;
+    background-color: var(--medium-green);
     display: flex;
-    width: 100%;
 }
 
 menu {
     display: flex;
     margin: 10px;
     margin-top: 3px;
-    margin-bottom: 3px;
     gap: 10px;
     padding: 0;
-    width: 100%;
 }
 
 .navButton {
     flex: 1;
-    border: var(--light-pink) solid;
+    border: var(--light-green) solid;
     border-radius: 5px;
-    background-color: var(--light-pink);
+    background-color: var(--light-green);
     padding: 5px;
     text-align: center;
+}
+
+.navButton:hover {
+    background-color: var(--light-pink);
+    border: var(--light-pink) solid;
 }
