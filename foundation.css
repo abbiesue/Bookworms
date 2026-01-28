@@ -117,4 +117,29 @@ a:hover {
     color: var(--medium-pink)
 }
 
+.wavy {
+    background: linear-gradient(
+        90deg,
+        var(--dark-green),
+        var(--medium-green),
+        var(--light-green),
+        var(--dark-pink),
+        var(--medium-pink),
+        var(--light-pink),
+        var(--dark-green)
+    );
+    background-size: 300% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: wave 20s linear infinite;
+}
 
+@keyframes wave {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
