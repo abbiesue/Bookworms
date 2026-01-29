@@ -1,0 +1,157 @@
+#expandedContent {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.5s ease-in-out, 
+                opacity 0.5s ease-in-out,
+                transform 0.5s ease-out;
+}
+
+#expandToggle:checked ~ #expandedContent {
+    display: block;
+    text-align: center;
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.textContainer {
+    width: 98%;
+    font-style: italic;
+    font-weight: bold;
+    color: rgb(62, 60, 60);
+}
+
+.fullText {
+    font-style: normal;
+    font-weight: normal;
+    color:rgb(110, 98, 98)
+}
+
+.likeButton label::before {
+    content: "🩷 Like";
+}
+
+.likeButton input[type="checkbox"]:checked + label::before {
+    content: "💗 Liked";
+}
+
+.likeButton input[type="checkbox"] {
+    display: none;
+}
+
+.laughButton label::before {
+    content: "😂 Laugh";
+}
+
+.laughButton input[type="checkbox"]:checked + label::before {
+    content: "🤣 Laughed";
+}
+
+.laughButton input[type="checkbox"] {
+    display: none;
+}
+
+.cryButton label::before {
+    content: "😢 Cry";
+}
+
+.cryButton input[type="checkbox"]:checked + label::before {
+    content: "😭 Cried";
+}
+
+.cryButton input[type="checkbox"] {
+    display: none;
+}    
+
+.commentButton {
+    position: relative;
+}
+
+.commentButton input[type="checkbox"] {
+    display: none;
+}
+
+.commentButton label {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.commentButton label:hover {
+    background-color: #f0f0f0;
+}
+
+.commentButton label::before {
+    content: "💬 Critiques";
+}
+
+.commentButton input[type="checkbox"]:checked ~ .commentSection {
+    display: block;
+}
+
+.commentSection {
+    display: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-left: 3px solid #f55472;
+    border-radius: 3px;
+}
+
+.commentText {
+    color: #666;
+}
+
+.commentInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: rgb(245, 200, 206);
+    font-family: inherit;
+    resize: vertical;
+}
+
+.submitComment {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #f55472;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.promptContainer {
+    border: white 2 px solid;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 5%;
+    width: 90%;
+    justify-self: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
+    transition: all 0.5s ease;
+}
+
+.promptContainer:hover {
+    transform: scale(1.01);
+}
+
+.promptContainer h1 {
+    background-color: var(--light-green);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin-bottom: 0;
+}
