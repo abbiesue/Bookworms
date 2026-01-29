@@ -51,8 +51,17 @@
     justify-self: center;
     justify-items: center;
     width: 90%;
+    height: 250px;
 }
 
 .responseForm input {
+    width: 100%;
+    height: 100%;
+    border: var(--medium-green) 2px solid;
+    border-radius: 10px;
+    font-family: "Nunito";
+}
 
+.responseForm input:hover {
+    background-color: lightgray;
 }
