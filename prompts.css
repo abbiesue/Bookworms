@@ -55,5 +55,55 @@
 }
 
 .bonusContainer {
-    background-color: white;
+    background-color:#bdd9b9;
+    width: 87%;
+    margin-top: o;
+    justify-self: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
+    transition: all 0.5s ease;
+}
+
+.bonusContainer h3 {
+    display: block;
+}
+
+.bonusContainer:hover{
+    transform: scale(1.01);
+}
+
+#dropFirst{
+    animation: dropFirst 1s ease-in-out;
+}
+
+@keyframes dropFirst{
+    0% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+#dropSecond{
+    animation: dropSecond 1s ease-in-out;
+}
+
+@keyframes dropSecond{
+    0% {
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
 }
