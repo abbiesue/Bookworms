@@ -47,35 +47,12 @@
     transform: scale(1.01);
 }
 
-#dropFirst{
-    animation: dropFirst 1s ease-in-out;
+.responseForm {
+    justify-self: center;
+    justify-items: center;
+    width: 90%;
 }
 
-@keyframes dropFirst{
-    0% {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0px);
-        opacity: 1;
-    }
-}
+.responseForm input {
 
-#dropSecond{
-    animation: dropSecond 1s ease-in-out;
-}
-
-@keyframes dropSecond{
-    0% {
-        opacity: 0;
-    }
-    50% {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0px);
-        opacity: 1;
-    }
 }
