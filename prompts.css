@@ -60,8 +60,26 @@
     border: var(--medium-green) 2px solid;
     border-radius: 10px;
     font-family: "Nunito";
+    border-bottom-left-radius: 0;
+    transition: all 0.3s ease;
 }
 
 .responseForm input:hover {
     background-color: lightgray;
+}
+
+.responseForm button {
+    font-family: "Nunito";
+    border-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: var(--medium-green) 2px solid;
+    background-color: var(--medium-green);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.responseForm button:hover {
+    background-color: var(--dark-pink);
+    border-color: var(--dark-pink);
 }

@@ -163,7 +163,7 @@ a:hover {
 }
 
 #dropSecond{
-    animation: dropSecond 1s ease-in-out;
+    animation: dropSecond 1.2s ease-in-out;
 }
 
 @keyframes dropSecond{
@@ -171,6 +171,24 @@ a:hover {
         opacity: 0;
     }
     50% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+#dropThird{
+    animation: dropThird 1.4s ease-in-out;
+}
+
+@keyframes dropThird{
+    0% {
+        opacity: 0;
+    }
+    75% {
         transform: translateY(-10px);
         opacity: 0;
     }
