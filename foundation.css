@@ -123,10 +123,13 @@ a:hover {
         var(--dark-green),
         var(--medium-green),
         var(--light-green),
-        var(--dark-pink),
-        var(--medium-pink),
         var(--light-pink),
-        var(--dark-green)
+        var(--medium-pink),
+        var(--dark-pink),
+        var(--dark-green),
+        var(--medium-green),
+        var(--light-green),
+        var(--light-pink)
     );
     background-size: 300% 100%;
     background-clip: text;
@@ -140,6 +143,6 @@ a:hover {
         background-position: 0% 50%;
     }
     100% {
-        background-position: 200% 50%;
+        background-position: 100% 50%;
     }
 }
