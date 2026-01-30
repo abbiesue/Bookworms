@@ -16,17 +16,55 @@
     transform: translateY(0);
 }
 
-.textContainer {
-    width: 98%;
+.feed {
+    display: block;
+    justify-self: center;
+    text-align: left;
+    width: 90%;
+    background-color: white;
+    border: white 2px solid;
+    margin: 2%;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+        box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
+}
+
+.response {
+    display: block;
+    margin-bottom: 3%;
+    border: var(--medium-green) solid;
+    background-color: var(--medium-green);
+    border-radius: 10px;
+    width: 97%;
+    justify-self: center;
+}
+
+.responseAuthorContainer {
+    margin: 1%;
+    color: var(--light-green)
+}
+
+.responseAuthor {
+    color: white;
+    background-color: var(--light-green);
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.responseText {
+    width: 95%;
+    justify-self: center;
     font-style: italic;
     font-weight: bold;
-    color: rgb(62, 60, 60);
+    color: white;
+    margin-bottom: 2%;
 }
 
 .fullText {
     font-style: normal;
     font-weight: normal;
-    color:rgb(110, 98, 98)
+    color: var(--white-green);
+    margin-bottom: 2%;
 }
 
 .likeButton label::before {
@@ -134,7 +172,8 @@
 
 .promptContainer {
     border: white 2 px solid;
-    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     background-color: white;
     margin-top: 5%;
     width: 90%;
