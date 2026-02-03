@@ -23,6 +23,10 @@
     margin-bottom: 0;
 }
 
+.promptContainer label{
+    color: var(--dark-green);
+}
+
 #expandedContent {
     max-height: 0;
     overflow: hidden;
@@ -51,7 +55,7 @@
     margin: 2%;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-        box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
+    box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
 }
 
 .response {
@@ -62,6 +66,12 @@
     border-radius: 10px;
     width: 97%;
     justify-self: center;
+    box-shadow: 0 4px 8px rgba(44, 73, 56, 0.2);
+    transition: all 0.5s ease;
+}
+
+.response:hover {
+    transform: scale(1.01);
 }
 
 .responseAuthorContainer {
@@ -106,7 +116,8 @@
     font-family: "Nunito";
 }
 
-.reactButton label {
+.reactionPanel label {
+    color: white;
     cursor: pointer;
 }
 
@@ -158,10 +169,6 @@
     transition: max-height 0.5s ease-in-out, 
                 opacity 0.5s ease-in-out,
                 transform 0.5s ease-out;
-}
-
-label {
-    color: white;
 }
 
 .critiqueToggle:checked ~ #expandedCritiques {
