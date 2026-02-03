@@ -1,0 +1,52 @@
+    #expandedContent {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    #expandToggle:checked ~ #expandedContent {
+        display: block;
+        text-align: center;
+        max-height: 500px; /* Adjust based on content */
+    }
+
+    .profileContainer{
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        justify-items: center;
+        padding: 20px;    
+    }
+    .profilePicture{
+        border-radius: 50%;
+        border: 3px solid rgb(245, 200, 206);
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+    .authorLevel{
+        border:#f55472 2px solid
+    }
+    .dailyBonuses {
+        list-style: none;
+        padding: 0;
+    }
+    .bonus {
+        list-style: none;
+        justify-self: left;
+    }
+    .bonus input[type="checkbox"]:checked + label .text{
+        text-decoration: line-through;
+        color: #999;
+    }
+    .bonus input[type="checkbox"] {
+        display: none;
+    }
+    .bonus label::before {
+        content: "⭐️ ";
+        font-size: 20px;
+    }
+    .bonus input[type="checkbox"]:checked + label::before {
+        content: "🌟";
+    }
