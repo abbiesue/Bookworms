@@ -37,7 +37,16 @@
         padding: 1%;
         color: white;
         box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
-        transition: all 0.5s ease;
+        animation: dropFirst 0.8s ease-out forwards, pulse 2s ease-in-out 0.8s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
     }
 
     .authorLevelContainer{
@@ -107,6 +116,30 @@
 
     .bonus input[type="checkbox"]:checked + label::before {
         content: "🌟";
+    }
+
+    .promptArchive{
+        border: 2px solid var(--medium-green); 
+        border-radius: 10px;
+        width: 98%; 
+        text-align: center;
+        background-color: var(--white-green);
+        box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
+        width:90%;
+        justify-self: center;
+        color: var(--black-green);
+        transition: all 0.5s ease;
+    }
+
+    .promptArchive:hover{
+        transform: scale(1.01);
+    }
+
+    .promptArchive h3{
+        margin-top: 0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-color: var(--medium-green);
     }
         
     #expandedContent {
