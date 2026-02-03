@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookworms HTML</title>
     <link rel="icon" href="bookwormIconFinal.ico" />
-    <link rel="stylesheet" href="profile.css"> 
     <link rel="stylesheet" href="foundation.css"> 
+        <link rel="stylesheet" href="profile.css"> 
   </head>
   <body>
     <header>
@@ -29,38 +29,34 @@
     <main>
         <div class="profileContainer">
             <img class="profilePicture" src="catProfilePic.jpeg" alt="Profile Picture">
-            <h2 style="color: #f55472;">BOOKWORMLVR_100</h2>
-            <div style="border: rgb(245, 200, 206) solid; background-color: rgb(245, 200, 206); width: 200px; border-radius: 5px;">
+            <h2 class="authorName">BOOKWORMLVR_100</h2>
+            <div class="streakContainer">
                 <span style="font-weight: bold;">100</span>
                 <span> DAY STREAK </span>
             </div>
-            <div style="border: 4px solid white"></div>
-            <div class="authorLevel">
-                <div style="border:#f55472 solid; background-color: #f55472; color: white; width: 300px">CREATIVE GENIUS (level 100)</div>
+            <div class="authorLevelContainer">
+                <div class="authorLevel">CREATIVE GENIUS (level 100)</div>
                 <span>next stage: VIB</span>
                 <div>⭐️ 132 / 200 bonuses</div>
                 <div>💬 30 / 50 critiques</div>
             </div>
-            <div style="border: 4px solid white"></div>
-            <div class="dailyBonuses" style="border: rgb(245, 200, 206) solid; background-color: rgb(245, 200, 206); width: 300px; border-radius: 5px;">
-                <div style="border:rgb(245, 200, 206) solid 3px;">
-                    <span style="font-size: large;">DAILY BONUSES:</span>
-                    <span style="background-color: #6d2432; border:#6d2432 solid 2px; color: white; border-radius: 5px;">2/3</span>
-                    <ul>
-                        <li class="bonus">
-                            <input type="checkbox" id="bonus1" checked>
-                            <label for="bonus1"><span class="text">use the word "intergalactic"</span></label>
-                        </li>
-                        <li class="bonus">
-                            <input type="checkbox" id="bonus2" checked>
-                            <label for="bonus2"><span class="text">set in the future</span></label>
-                        </li>
-                        <li class="bonus">
-                            <input type="checkbox" id="bonus3">
-                            <label for="bonus3"><span class="text">make one character a cowboy</span></label>
-                        </li>                                                
-                    </ul>
-                </div>
+            <div class="dailyBonuses">
+                <span style="font-size: large;">DAILY BONUSES:</span>
+                <span class="bonusProgress">2/3</span>
+                <ul>
+                    <li class="bonus">
+                        <input type="checkbox" id="bonus1" checked>
+                        <label for="bonus1"><span class="text">use the word "intergalactic"</span></label>
+                    </li>
+                    <li class="bonus">
+                        <input type="checkbox" id="bonus2" checked>
+                        <label for="bonus2"><span class="text">set in the future</span></label>
+                    </li>
+                    <li class="bonus">
+                        <input type="checkbox" id="bonus3">
+                        <label for="bonus3"><span class="text">make one character a cowboy</span></label>
+                    </li>                                                
+                </ul>
             </div>
         </div>
         <div style="border: 2px solid #f55472; width: 98%; text-align: center; background-color: rgb(245, 200, 206);">

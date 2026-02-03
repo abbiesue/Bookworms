@@ -1,3 +1,114 @@
+    body{
+        background-color: white;
+    }
+
+    .profileContainer{
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        justify-items: center;
+        padding: 20px;    
+    }
+
+    .profilePicture{
+        border-radius: 50%;
+        border: 3px solid var(--medium-pink);
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
+        transition: all 0.5s ease;
+    }
+
+    .profilePicture:hover{
+        transform: scale(1.01);
+    }
+
+    .authorName{
+        color: var(--dark-pink);
+        margin: 2%;
+    }
+
+    .streakContainer{
+        background-color: var(--medium-pink);
+        margin-bottom: 2%;
+        border-radius: 5px;
+        border: 2px solid var(--medium-pink);
+        padding: 1%;
+        color: white;
+        box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
+        transition: all 0.5s ease;
+    }
+
+    .authorLevelContainer{
+        border: var(--dark-pink) 2px solid;
+        border-radius: 5px;
+        background-color: var(--light-pink);
+        margin: 2%;
+        color: var(--medium-pink);
+        box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
+        transition: all 0.5s ease;
+    }
+
+    .authorLevelContainer:hover {
+        transform: scale(1.01);
+    }
+
+    .authorLevel{
+        border: var(--dark-pink) solid;
+        background-color: var(--dark-pink); 
+        color: white; 
+        width: 300px"
+    }
+
+    .dailyBonuses {
+        list-style: none;
+        padding: 2%;
+        border: var(--light-pink) solid; 
+        background-color: var(--light-pink); 
+        width: 300px; 
+        border-radius: 20px;
+        transition: all 0.5s ease;
+        box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);
+        color: var(--dark-pink);
+    }
+
+    .dailyBonuses:hover {
+        transform: scale(1.01);
+    }
+
+    .bonusProgress{
+        background-color: var(--dark-pink); 
+        border: var(--dark-pink) solid 2px; 
+        color: white; 
+        border-radius: 5px;
+        padding: 0.5%;
+    }
+
+    .bonus {
+        list-style: none;
+        justify-self: left;
+        color: var(--dark-pink)
+    }
+
+    .bonus input[type="checkbox"]:checked + label .text{
+        text-decoration: line-through;
+        color: var(--medium-pink);
+    }
+
+    .bonus input[type="checkbox"] {
+        display: none;
+    }
+
+    .bonus label::before {
+        content: "⭐️ ";
+        font-size: 20px;
+    }
+
+    .bonus input[type="checkbox"]:checked + label::before {
+        content: "🌟";
+    }
+        
     #expandedContent {
         display: none;
         max-height: 0;
@@ -9,44 +120,4 @@
         display: block;
         text-align: center;
         max-height: 500px; /* Adjust based on content */
-    }
-
-    .profileContainer{
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: center;
-        justify-items: center;
-        padding: 20px;    
-    }
-    .profilePicture{
-        border-radius: 50%;
-        border: 3px solid rgb(245, 200, 206);
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-    }
-    .authorLevel{
-        border:#f55472 2px solid
-    }
-    .dailyBonuses {
-        list-style: none;
-        padding: 0;
-    }
-    .bonus {
-        list-style: none;
-        justify-self: left;
-    }
-    .bonus input[type="checkbox"]:checked + label .text{
-        text-decoration: line-through;
-        color: #999;
-    }
-    .bonus input[type="checkbox"] {
-        display: none;
-    }
-    .bonus label::before {
-        content: "⭐️ ";
-        font-size: 20px;
-    }
-    .bonus input[type="checkbox"]:checked + label::before {
-        content: "🌟";
     }
