@@ -1,0 +1,22 @@
+main {
+    margin:4%;
+}
+
+h1 {
+    padding: 4%;
+    background-color: var(--light-green);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin-bottom: 0;
+}
+
+p {
+    background-color: white;
+    padding: 4%;
+    margin: 0;
+}
+
+#gitAd {
+    padding: 4%;
+    margin: 0; 
+}
