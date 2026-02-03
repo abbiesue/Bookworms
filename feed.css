@@ -103,6 +103,7 @@
     border-radius: 5px;
     color: white;
     padding: 1%;
+    font-family: "Nunito";
 }
 
 .reactButton label {
@@ -147,72 +148,65 @@
 
 #cryButton input[type="checkbox"] {
     display: none;
-}    
+}   
 
-#commentButton {
-    justify-self: left;
+#expandedCritiques {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.5s ease-in-out, 
+                opacity 0.5s ease-in-out,
+                transform 0.5s ease-out;
 }
 
-#commentButton input[type="checkbox"] {
-    display: none;
-}
-
-#commentButton label {
-    cursor: pointer;
-    padding: 10px 20px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    display: inline-block;
-    transition: all 0.3s;
-}
-
-#commentButton label:hover {
-    background-color: #f0f0f0;
-}
-
-#commentButton label::before {
-    content: "💬 Critiques";
-}
-
-#commentButton input[type="checkbox"]:checked ~ .commentSection {
-    display: block;
-}
-
-.commentSection {
-    display: none;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.comment {
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: white;
-    border-left: 3px solid #f55472;
-    border-radius: 3px;
-}
-
-.commentText {
-    color: #666;
-}
-
-.commentInput {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: rgb(245, 200, 206);
-    font-family: inherit;
-    resize: vertical;
-}
-
-.submitComment {
-    display: none;
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #f55472;
+label {
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+}
+
+.critiqueToggle:checked ~ #expandedCritiques {
+    display: block;
+    text-align: center;
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.critiqueFeed{
+    background-color: var(--light-green);
+    margin-bottom: 2%;
+    border-radius: 10px;
+}
+
+.existingCritiques{
+    text-align: left;
+    justify-content: left;
+}
+
+.critique {
+    background-color: white;
+    width: 96%;
+    justify-self: center;
+    border-left: var(--dark-pink) solid 2px;
+    padding-left: 1%;
+    margin:1%;
+}
+
+.critiqueAuthor{
+    font-weight: bold;
+}
+
+.addCritique{
+    text-align: left;
+    padding: 2%;
+}
+
+.critiqueInput {
+    margin-top: 0;
+    background-color: var(--white-green);
+    font-family: "Nunito";
+    border: 0px;
+    border-radius: 2px;
+    width: 98%;
+    justify-self: center;
 }
