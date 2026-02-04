@@ -107,12 +107,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Visually appealing colors and layout. No overflowing elements.** - I did not complete this part of the deliverable.
-- [ ] **Use of a CSS framework** - I did not complete this part of the deliverable.
-- [ ] **All visual elements styled using CSS** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing using flexbox and/or grid display** - I did not complete this part of the deliverable.
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
-- [ ] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I did not complete this part of the deliverable.
+- [x] **Visually appealing colors and layout. No overflowing elements.** - I created a palette of color variables that compliment one another and made elements resize to screen layout. 
+- [x] **Use of a CSS framework** - I included bootstap in my index file and used it for the login form.
+- [x] **All visual elements styled using CSS** - All visuals are styled with CSS with no remaining untouched HTML skeleton.
+- [x] **Responsive to window resizing using flexbox and/or grid display** - I used flex display to keep lines of elements dynamic to screen size. 
+- [x] **Use of a imported font** - I imported quicksand and nunito to use in all text.
+- [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I used a wide variety of elements, classes, and IDs to create a dynamic environment. 
 
 ## 🚀 React part 1: Routing deliverable
 
