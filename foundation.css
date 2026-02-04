@@ -91,7 +91,7 @@ menu {
 }
 
 .navButton:link {
-    color: var(--dark-green)
+    color: var(--dark-green);
 }
 
 .navButton:hover {
@@ -110,11 +110,15 @@ menu {
 }
 
 a {
-    color: var(--dark-pink)
+    color: var(--dark-pink);
+}
+
+a:visited {
+    color: inherit;
 }
 
 a:hover {
-    color: var(--medium-pink)
+    color: var(--medium-pink);
 }
 
 .wavy {
