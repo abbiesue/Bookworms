@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookworms HTML</title>
     <link rel="icon" href="bookwormIconFinal.ico" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="foundation.css">  
     <link rel="stylesheet" href="index.css">  
   </head>
@@ -25,12 +29,12 @@
       <div class="loginPrompt">
         <h2>Log in to get started:</h2>
         <form method="get" action="prompts.html">
-          <div>
-            <span>email:</span>
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">email:</label>
             <input type="text" placeholder="your@email.com" />
           </div>
           <div>
-            <span>password</span>
+            <label for="passwordInput" class="form-label">password:</label>
             <input type="password" placeholder="password" />
           </div>
           <button type="submit">Login</button>
@@ -46,6 +50,6 @@
       <br />
       <a href="https://github.com/abbiesue/Bookworms">GitHub</a>
     </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
