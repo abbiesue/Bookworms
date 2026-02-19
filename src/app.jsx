@@ -15,8 +15,8 @@ export default function App() {
         <div className="app">
             <header>
                 <h1 className="banner">
-                <img className="bannerImage" src="bannerBookworm.jpg" alt="Bookworms Banner"/>
-                <span className="wavy">Bookworms</span>
+                  <img className="bannerImage" src="bannerBookworm.jpg" alt="Bookworms Banner"/>
+                  <span className="wavy">Bookworms</span>
                 </h1>
                 <nav>
                     <menu>
