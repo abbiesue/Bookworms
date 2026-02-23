@@ -20,11 +20,11 @@ export default function App() {
                 </h1>
                 <nav>
                     <menu>
-                    <div className="navButtonContainer"><NavLink className="navButton" to= "">Home</NavLink></div>
-                    <div className="navButtonContainer"><NavLink className="navButton" to="/prompt">Prompt</NavLink></div>
-                    <div className="navButtonContainer"><NavLink className="navButton" to= "/feed">Response Feed</NavLink></div>
-                    <div className="navButtonContainer"><NavLink className="navButton" to= "/profile">Profile</NavLink></div>
-                    <div className="navButtonContainer"><NavLink className="navButton" to= "/about">About</NavLink></div>
+                      <div className="navButtonContainer"><NavLink className="navButton" to= "">Home</NavLink></div>
+                      <div className="navButtonContainer"><NavLink className="navButton" to="/prompt">Prompt</NavLink></div>
+                      <div className="navButtonContainer"><NavLink className="navButton" to= "/feed">Response Feed</NavLink></div>
+                      <div className="navButtonContainer"><NavLink className="navButton" to= "/profile">Profile</NavLink></div>
+                      <div className="navButtonContainer"><NavLink className="navButton" to= "/about">About</NavLink></div>
                     </menu>
                 </nav>
             </header>
@@ -39,10 +39,15 @@ export default function App() {
             </Routes>
 
             <footer>
-            <hr />
-            <span className="text-reset">Abigail Peterson</span>
-            <br />
-            <a href="https://github.com/abbiesue/Bookworms">GitHub</a>
+              <div className="text-reset">Abigail Peterson</div>
+              <a
+                className="btn btn-outline-light btn-sm"
+                href="https://github.com/abbiesue/Bookworms"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
             </footer>
         </div>
     </BrowserRouter>

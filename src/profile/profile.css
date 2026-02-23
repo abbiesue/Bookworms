@@ -67,7 +67,7 @@
         border: var(--dark-pink) solid;
         background-color: var(--dark-pink); 
         color: white; 
-        width: 300px"
+        width: 300px;
     }
 
     .dailyBonuses {
