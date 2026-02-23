@@ -1,0 +1,24 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ResponseState } from '../profile/responseState';
+
+import Button from 'react-bootstrap/Button';
+
+export function Authenticated(props) {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (props.responseState === ResponseState.NotResponded) {
+      navigate('/prompt');
+    } else {
+      navigate('/feed');
+    }
+  }, []);
+
+  function logout() {
+    localStorage.removeItem('userName');
+    props.onLogout();
+  }
+
+  return;
+}

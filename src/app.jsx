@@ -2,14 +2,22 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useNavigate} from 'react-router-dom';
 import { Login } from './login/login';
 import { Prompt } from './prompt/prompt';
 import { Feed } from './feed/feed';
 import { Profile } from './profile/profile';
 import { About } from './about/about';
+import { AuthState } from './login/authState';
+import { ResponseState } from './profile/responseState';
 
 export default function App() {
+  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+  const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
+  const [authState, setAuthState] = React.useState(currentAuthState);
+  const [responseState, setResponseState] = React.useState(ResponseState.NotResponded);
+
+
   return (
     <BrowserRouter>
         <div className="app">
@@ -18,19 +26,53 @@ export default function App() {
                   <img className="bannerImage" src="bannerBookworm.jpg" alt="Bookworms Banner"/>
                   <span className="wavy">Bookworms</span>
                 </h1>
+                {authState === AuthState.Authenticated && (
+                  <LogoutButton
+                    userName={userName}
+                    onLogout={() => {
+                      localStorage.removeItem('userName');
+                      setUserName('');
+                      setAuthState(AuthState.Unauthenticated);
+                    }}
+                  />
+                )}
                 <nav>
                     <menu>
-                      <div className="navButtonContainer"><NavLink className="navButton" to= "">Home</NavLink></div>
-                      <div className="navButtonContainer"><NavLink className="navButton" to="/prompt">Prompt</NavLink></div>
-                      <div className="navButtonContainer"><NavLink className="navButton" to= "/feed">Response Feed</NavLink></div>
-                      <div className="navButtonContainer"><NavLink className="navButton" to= "/profile">Profile</NavLink></div>
+                      {authState === AuthState.Unauthenticated && (
+                        <div className="navButtonContainer"><NavLink className="navButton" to= "">Login</NavLink></div>
+                      )}
+                      {authState === AuthState.Authenticated && (
+                        <>
+                          {responseState === ResponseState.NotResponded && (
+                            <div className="navButtonContainer"><NavLink className="navButton" to="/prompt">Prompt</NavLink></div>
+                          )}
+                          {responseState === ResponseState.Responded && (
+                            <div className="navButtonContainer"><NavLink className="navButton" to="/feed">Response Feed</NavLink></div>
+                          )}
+                          <div className="navButtonContainer"><NavLink className="navButton" to="/profile">Profile</NavLink></div>
+                        </>
+                      )}
                       <div className="navButtonContainer"><NavLink className="navButton" to= "/about">About</NavLink></div>
                     </menu>
                 </nav>
             </header>
 
             <Routes>
-                <Route path='/' element={<Login />} exact />
+              <Route
+                path='/'
+                element={
+                  <Login
+                    userName={userName}
+                    authState={authState}
+                    responseState={responseState}
+                    onAuthChange={(userName, authState) => {
+                      setAuthState(authState);
+                      setUserName(userName);
+                    }}
+                  />
+                }
+                exact
+              />
                 <Route path='/prompt' element={<Prompt />} />
                 <Route path='/feed' element={<Feed />} />
                 <Route path='/profile' element={<Profile />} />
@@ -51,6 +93,18 @@ export default function App() {
             </footer>
         </div>
     </BrowserRouter>
+  );
+}
+
+function LogoutButton({ userName, onLogout }) {
+  const navigate = useNavigate();
+  return (
+    <button className="userDisplay" onClick={() => {
+      onLogout();
+      navigate('/');
+    }}>
+      logout {userName}
+    </button>
   );
 }
 

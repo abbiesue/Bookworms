@@ -69,6 +69,24 @@ header {
     padding: 0;
 }
 
+.userDisplay {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+  color: var(--light-pink);
+  background-color: var(--medium-pink);
+  border: 1px solid var(--light-pink);
+  border-radius: 5px;
+  padding: 4px 10px;
+}
+
+.userDisplay:hover {
+  background-color: var(--dark-pink);
+  color: var(--medium-pink);
+  text-decoration: none;
+}
+
 nav {
     border: var(--medium-green) solid;
     background-color: var(--medium-green);
