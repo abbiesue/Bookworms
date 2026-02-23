@@ -68,16 +68,17 @@ export default function App() {
                     onAuthChange={(userName, authState) => {
                       setAuthState(authState);
                       setUserName(userName);
-                    }}
-                  />
-                }
-                exact
-              />
-                <Route path='/prompt' element={<Prompt />} />
-                <Route path='/feed' element={<Feed />} />
-                <Route path='/profile' element={<Profile />} />
-                <Route path='/about' element={<About />} />
-                <Route path='*' element={<NotFound />} />
+                    }} />
+                } exact />
+               <Route path='/prompt' element={
+                  <Prompt onRespond={() => {
+                    setResponseState(ResponseState.Responded);
+                  }} />
+                } />
+              <Route path='/feed' element={<Feed />} />
+              <Route path='/profile' element={<Profile />} />
+              <Route path='/about' element={<About />} />
+              <Route path='*' element={<NotFound />} />
             </Routes>
 
             <footer>
