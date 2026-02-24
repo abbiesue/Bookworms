@@ -142,14 +142,6 @@
                 transform 0.5s ease-out;
 }
 
-.critiqueToggle:checked ~ #expandedCritiques {
-    display: block;
-    text-align: center;
-    max-height: 500px;
-    opacity: 1;
-    transform: translateY(0);
-}
-
 .critiqueFeed{
     background-color: var(--light-green);
     margin-bottom: 2%;
