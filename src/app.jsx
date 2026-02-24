@@ -88,7 +88,7 @@ export default function App() {
                     setResponseState(ResponseState.Responded);
                   }} />
                 } />
-              <Route path='/feed' element={<Feed />} />
+              <Route path='/feed' element={<Feed userName={userName} />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/about' element={<About />} />
               <Route path='*' element={<NotFound />} />
