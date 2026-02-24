@@ -24,107 +24,28 @@ export function Feed(props) {
                     initialCritiques={[]}
                 />
 
-                <div className="response">
-                    <div className="responseAuthorContainer"><span className="responseAuthor">Mia_writes</span> wrote:</div>
-                    <div className="responseText"> 
-                        <details>
-                            <summary>
-                                "'Don't do it,' he pleaded."
-                            </summary>
-                            <div className="fullText"> "Don't do it," he pleaded. <p>"This is the way," I, the mandolorian replied. Thankfully my super awesome mask covered my tears as I raised the blaster. "So long, friend."</p></div>
-                        </details>
-                    </div>
-                    <div className="reactionPanel">
-                        <button className="reactButton" id="likeButton">
-                            <input type="checkbox" id="like2" />
-                            <label htmlFor="like2"></label>
-                        </button> 
-                        <button className="reactButton" id="laughButton">
-                            <input type="checkbox" id="laugh2" />
-                            <label htmlFor="laugh2"></label>
-                        </button>
-                        <button className="reactButton" id="cryButton">
-                            <input type="checkbox" id="cry2" />
-                            <label htmlFor="cry2"></label>
-                        </button>
+                <ResponseCard
+                    author="Mia_writes"
+                    currentUser={props.userName}
+                    fullText='"Dont do it," he pleaded.
+"This is the way," I, the mandolorian replied. Thankfully my super awesome mask covered my tears as I raised the blaster. "So long, friend."'
+                    initialReactions={{ like: 3, laugh: 5, cry: 1 }}
+                    initialCritiques={[
+                        {author: "Tomatoe505", text: "lol I love Mando, where's grogu?"},
+                        {author: "Tomatoe505", text: "wait does this count as fanfic?"}
+                    ]}
+                />
 
-                        <input className="critiqueToggle" type="checkbox" id="critiqueToggle2" hidden />
-                        <label htmlFor="critiqueToggle2">💬 Critiques</label>
-                        <div id="expandedCritiques">
-                            <div className="critiqueFeed">
-                                <div className="existingCritiques">
-                                    <h4>Critiques:</h4>
-                                    <div className="critique">
-                                        <div className="critiqueAuthor">Tomatoe505</div>
-                                        <div className="critiqueText">lol I love Mando, where's grogu?</div>
-                                    </div>
-
-                                    <div className="critique">
-                                        <div className="critiqueAuthor">Tomatoe505</div>
-                                        <div className="critiqueText">wait does this count as fanfic?</div>
-                                    </div>
-                                </div>
-
-                                <div className="addCritique">
-                                    <h4>Add a critique:</h4>
-                                    <textarea className="critiqueInput" rows="3" placeholder="Write your critique here..."></textarea>
-                                    <button className="submitCritique">Post Critique</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="response">
-                    <div className="responseAuthorContainer"><span className="responseAuthor">Tomatoe505</span> wrote:</div>
-                    <div className="responseText"> 
-                        <details>
-                            <summary>
-                                "Hey guys, I'm trying to keep my streak lol"
-                            </summary>
-                            <div className="fullText"> Hey guys, I'm trying to keep my streak lol. I'll be serious about it tomorrow. Leave a like if you're watching the game tonight.</div>
-                        </details>
-                    </div>
-                    <div className="reactionPanel">
-                        <button className="reactButton" id="likeButton">
-                            <input type="checkbox" id="like3" />
-                            <label htmlFor="like3"></label>
-                        </button> 
-                        <button className="reactButton" id="laughButton">
-                            <input type="checkbox" id="laugh3" />
-                            <label htmlFor="laugh3"></label>
-                        </button>
-                        <button className="reactButton" id="cryButton">
-                            <input type="checkbox" id="cry3" />
-                            <label htmlFor="cry3"></label>
-                        </button>
-
-                        <input className="critiqueToggle" type="checkbox" id="critiqueToggle3" hidden />
-                        <label htmlFor="critiqueToggle3">💬 Critiques</label>
-                        <div id="expandedCritiques">
-                            <div className="critiqueFeed">
-                                <div className="existingCritiques">
-                                    <h4>Critiques:</h4>
-                                    <div className="critique">
-                                        <div className="critiqueAuthor">Mia_writes</div>
-                                        <div className="critiqueText">My like depends on which game you mean...</div>
-                                    </div>
-
-                                    <div className="critique">
-                                        <div className="critiqueAuthor">Tomatoe505</div>
-                                        <div className="critiqueText">the byu basketball game. go cougs!</div>
-                                    </div>
-                                </div>
-
-                                <div className="addCritique">
-                                    <h4>Add a critique:</h4>
-                                    <textarea className="critiqueInput" rows="3" placeholder="Write your critique here..."></textarea>
-                                    <button className="submitCritique">Post Critique</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ResponseCard
+                    author="Tomatoe505"
+                    currentUser={props.userName}
+                    fullText="Hey guys, I'm trying to keep my streak lol. I'll be serious about it tomorrow. Leave a like if you're watching the game tonight."
+                    initialReactions={{ like: 8, laugh: 3, cry: 0 }}
+                    initialCritiques={[
+                        {author: "Mia_writes", text: "My like depends on which game you mean..."},
+                        {author: "Tomatoe505", text: "the byu basketball game. go cougs!"}
+                    ]}
+                />
             </div>
         </main>    
     );
