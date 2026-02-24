@@ -18,8 +18,10 @@ export function Feed(props) {
                 <h2>Friend Feed:</h2>
                 <ResponseCard
                     author={props.userName}
+                    currentUser={props.userName}
                     fullText={userResponse}
                     initialReactions={{ like: 0, laugh: 0, cry: 0 }}
+                    initialCritiques={[]}
                 />
 
                 <div className="response">

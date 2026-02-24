@@ -105,6 +105,10 @@
 .reactionPanel{
     margin-left: 2%;
     margin-right: 2%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
 }
 
 .reactButton{
@@ -182,4 +186,10 @@
     border-radius: 2px;
     width: 98%;
     justify-self: center;
+}
+
+.critiqueInput:focus {
+    outline: none;
+    background-color: white;
+    box-shadow: 0 0 5px var(--medium-pink);
 }
