@@ -116,50 +116,16 @@
     font-family: "Nunito";
 }
 
-.reactionPanel label {
-    color: white;
-    cursor: pointer;
+.reactionCount {
+    font-size: 0.75em;
+    color: var(--white-green);
+    margin-left: 3px;
 }
 
 .reactButton:hover{
     background-color: var(--light-green);
     cursor: pointer;
 }
-
-#likeButton label::before {
-    content: "🩷 Like";
-}
-
-#likeButton input[type="checkbox"]:checked + label::before {
-    content: "💗 Liked";
-}
-
-#likeButton input[type="checkbox"] {
-    display: none;
-}
-
-#laughButton label::before {
-    content: "😂 Laugh";
-}
-
-#laughButton input[type="checkbox"]:checked + label::before {
-    content: "🤣 Laughed";
-}
-
-#laughButton input[type="checkbox"] {
-    display: none;
-}
-
-#cryButton label::before {
-    content: "😢 Cry";
-}
-#cryButton input[type="checkbox"]:checked + label::before {
-    content: "😭 Cried";
-}
-
-#cryButton input[type="checkbox"] {
-    display: none;
-}   
 
 #expandedCritiques {
     max-height: 0;
