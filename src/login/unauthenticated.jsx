@@ -1,6 +1,4 @@
 import React from 'react';
-
-import Button from 'react-bootstrap/Button';
 import { MessageDialog } from './messageDialog';
 
 export function Unauthenticated(props) {
@@ -31,12 +29,12 @@ export function Unauthenticated(props) {
             <label htmlFor="passwordInput" className="form-label">password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password" />
           </div>
-          <Button variant='primary' onClick={() => loginUser()} disabled={!userName || !password}>
+          <button onClick={() => loginUser()} disabled={!userName || !password}>
             Login
-          </Button>
-          <Button variant='secondary' onClick={() => createUser()} disabled={!userName || !password}>
+          </button>
+          <button onClick={() => createUser()} disabled={!userName || !password}>
             Create
-          </Button>
+          </button>
         </form>
       </div>
 

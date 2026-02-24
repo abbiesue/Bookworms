@@ -74,6 +74,12 @@ textarea {
     background-color: lightgray;
 }
 
+.responseForm textarea:focus {
+    outline: none;
+    border-color: var(--dark-pink);
+    background-color: #f9f9f9;
+}
+
 .responseForm button {
     font-family: "Nunito";
     border-top: 0;
