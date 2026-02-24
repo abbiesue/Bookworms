@@ -2,8 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResponseState } from '../profile/responseState';
 
-import Button from 'react-bootstrap/Button';
-
 export function Authenticated(props) {
   const navigate = useNavigate();
 

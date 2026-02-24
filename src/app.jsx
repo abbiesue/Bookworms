@@ -15,7 +15,11 @@ export default function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
-  const [responseState, setResponseState] = React.useState(ResponseState.NotResponded);
+  const [responseState, setResponseState] = React.useState(
+    localStorage.getItem(`responseState_${userName}`) === 'responded'
+      ? ResponseState.Responded
+      : ResponseState.NotResponded
+  );
 
 
   return (
@@ -65,13 +69,22 @@ export default function App() {
                     userName={userName}
                     authState={authState}
                     responseState={responseState}
-                    onAuthChange={(userName, authState) => {
-                      setAuthState(authState);
-                      setUserName(userName);
-                    }} />
+                    onAuthChange={(newUserName, newAuthState) => {
+                      setAuthState(newAuthState);
+                      setUserName(newUserName);
+                      setResponseState(
+                        localStorage.getItem(`responseState_${newUserName}`) === 'responded'
+                          ? ResponseState.Responded
+                          : ResponseState.NotResponded
+                      );
+                    }}
+                  />
                 } exact />
                <Route path='/prompt' element={
-                  <Prompt onRespond={() => {
+                  <Prompt 
+                  responseState={responseState} 
+                  userName={userName} 
+                  onRespond={() => {
                     setResponseState(ResponseState.Responded);
                   }} />
                 } />

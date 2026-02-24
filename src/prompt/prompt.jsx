@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ResponseState } from '../profile/responseState';
 import './prompt.css'
 
 export function Prompt(props) {
@@ -13,9 +14,17 @@ export function Prompt(props) {
     "make one character a cowboy",
   ]);
   const [response, setResponse] = React.useState('');
+  const [alreadyResponded, setAlreadyResponded] = React.useState(false);
+
+  React.useEffect(() => {
+    if (props.responseState === ResponseState.Responded) {
+      setAlreadyResponded(true);
+    }
+  }, []);
 
   function handlePublish() {
-    localStorage.setItem('response', response);
+    localStorage.setItem(`responseState_${props.userName}`, 'responded');
+    localStorage.setItem(`response_${props.userName}`, response);
     props.onRespond();
     navigate('/feed');
   }
@@ -40,6 +49,22 @@ export function Prompt(props) {
         />
         <button onClick={handlePublish} disabled={!response}>Publish</button>
       </div>
+
+      {alreadyResponded && (
+        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body">
+                You have already responded to today's prompt! You will be redirected to the response feed.
+              </div>
+              <div className="modal-footer">
+                <button onClick={() => navigate('/feed')}>Go to Feed</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }
