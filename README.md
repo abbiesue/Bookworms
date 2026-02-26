@@ -126,8 +126,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I added mock websocket reactions using setInterval and useEffect, mocked the response archiving, and pulling responses posted before yours. Likewise, I added a class for computing Author Level.
+- [x] **Hooks** - I created states for authentification and logging response status. I did this using the useState and useEffect hooks. The pages available to the user is based on authentification and response status. Unauthenticated users can only see login and about pages. Unresponded users cannot see the feed page. Responded users cannot see the prompt page. I also added a logout button that resets the authentification but does not alter response status. 
 
 ## 🚀 Service deliverable
 
