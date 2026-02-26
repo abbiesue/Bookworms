@@ -4,6 +4,39 @@ import './feed.css'
 
 export function Feed(props) {
     const userResponse = localStorage.getItem(`response_${props.userName}`);
+    const [liveResponses, setLiveResponses] = React.useState([]);
+    const mockResponses = [
+    {
+        author: "StoryTeller99",
+        fullText: "I always knew there was something different about Marcus. The way he moved through crowds like he owned them, the way villains seemed to flee at his mere presence...",
+        initialReactions: { like: 0, laugh: 0, cry: 0 },
+        initialCritiques: [],
+    },
+    {
+        author: "QuillMaster",
+        fullText: "She laughed when she saw the comic. 'That's supposed to be me?' The hero looked nothing like her — too tall, too confident, too sure of herself. Then again, maybe that was the point.",
+        initialReactions: { like: 0, laugh: 0, cry: 0 },
+        initialCritiques: [],
+    },
+    {
+        author: "WordWitch",
+        fullText: "The villain always gets the best lines. That's what they don't tell you when you're cast as the hero.",
+        initialReactions: { like: 0, laugh: 0, cry: 0 },
+        initialCritiques: [],
+    },
+    ];
+
+    React.useEffect(() => {
+    const timers = mockResponses.map((response, index) => {
+        return setTimeout(() => {
+        setLiveResponses(prev => [...prev, response]);
+        }, (index + 1) * 5000);
+    });
+
+    return () => timers.forEach(timer => clearTimeout(timer));
+    }, []);
+
+
     return (
         <main>
             <div className="promptContainer" id="dropFirst">
@@ -44,6 +77,17 @@ export function Feed(props) {
                         {author: "Tomatoe505", text: "the byu basketball game. go cougs!"}
                     ]}
                 />
+                
+                {liveResponses.map((response, index) => (
+                    <ResponseCard
+                        key={`live-${index}`}
+                        author={response.author}
+                        currentUser={props.userName}
+                        fullText={response.fullText}
+                        initialReactions={response.initialReactions}
+                        initialCritiques={response.initialCritiques}
+                    />
+                ))}
             </div>
         </main>    
     );
