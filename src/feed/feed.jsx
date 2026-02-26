@@ -10,9 +10,7 @@ export function Feed(props) {
                 <h1>~Daily Prompt~</h1>
                 <input type="checkbox" id="expandToggle" hidden />
                 <label htmlFor="expandToggle">⬇Click to Reveal Prompt⬇</label>
-                <div id="expandedContent">
-                "Two friends realize they are characters in a comic; one is the hero, one the villain..."
-                </div>
+                <div id="expandedContent"> {props.dailyPrompt} </div>
             </div>
             <div className="feed" id="dropFirst">
                 <h2>Friend Feed:</h2>

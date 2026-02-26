@@ -1,13 +1,10 @@
 import React from 'react';
 import './profile.css'
-import { AuthorLevel } from './AuthorLevel';
 import { AuthorLevelDisplay } from './AuthorLevelDisplay';
 import { PromptArchive } from './PromptArchive';
 import { BonusDisplay } from './BonusDisplay';
 
 export function Profile(props) {
-    const authorLevel = new AuthorLevel(props.userName, props.totalBonuses, props.totalCritiques);
-    authorLevel.setAuthorLevel();
     return (
         <main>
             <div className="profileContainer">
@@ -23,7 +20,10 @@ export function Profile(props) {
                     totalCritiques={props.totalCritiques} />
                 <BonusDisplay />
             </div>
-            <PromptArchive />
+            <PromptArchive 
+              dailyPrompt={props.dailyPrompt}
+              userName={props.userName}
+            />
         </main>
     );
 }

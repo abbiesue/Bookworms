@@ -5,9 +5,6 @@ import './prompt.css'
 
 export function Prompt(props) {
   const navigate = useNavigate();
-  const [dailyPrompt, setDailyPrompt] = React.useState(
-    "(This and bonuses will be retrieved from DB) Two friends realize they are characters in a comic; one is the hero, one the villain..."
-  );
   const [bonuses, setBonuses] = React.useState([
     'use the word "intergalactic"',
     "set in the future",
@@ -33,7 +30,7 @@ export function Prompt(props) {
     <main>
       <div className="promptContainer" id="dropFirst">
         <h1>~Daily Prompt~</h1>
-        <p>"{dailyPrompt}"</p>
+        <p>"{props.dailyPrompt}"</p>
       </div>
       <div className="bonusContainer" id="dropSecond">
         <h3><span>daily bonuses:</span></h3>

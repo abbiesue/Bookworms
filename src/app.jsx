@@ -20,6 +20,9 @@ export default function App() {
       ? ResponseState.Responded
       : ResponseState.NotResponded
   );
+  const [dailyPrompt, setDailyPrompt] = React.useState(
+  "Two friends realize they are characters in a comic; one is the hero, one the villain..."
+);
 
 
   return (
@@ -80,16 +83,30 @@ export default function App() {
                     }}
                   />
                 } exact />
-               <Route path='/prompt' element={
-                  <Prompt 
-                  responseState={responseState} 
+              <Route path='/prompt' element={
+                <Prompt 
+                dailyPrompt={dailyPrompt}
+                responseState={responseState} 
+                userName={userName} 
+                onRespond={() => {
+                  setResponseState(ResponseState.Responded);
+                }} />
+              } />
+              <Route path='/feed' element={
+                <Feed 
                   userName={userName} 
-                  onRespond={() => {
-                    setResponseState(ResponseState.Responded);
-                  }} />
-                } />
-              <Route path='/feed' element={<Feed userName={userName} />} />
-              <Route path='/profile' element={<Profile username={userName} streak={5} totalBonuses={57} totalCritiques={18} />} />
+                  dailyPrompt={dailyPrompt}
+                  />
+              } />
+              <Route path='/profile' element={
+                <Profile 
+                  userName={userName} 
+                  streak={5} 
+                  totalBonuses={57} 
+                  totalCritiques={18} 
+                  dailyPrompt={dailyPrompt} 
+                  />
+              } />
               <Route path='/about' element={<About />} />
               <Route path='*' element={<NotFound />} />
             </Routes>
