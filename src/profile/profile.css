@@ -141,16 +141,35 @@
         border-top-right-radius: 5px;
         background-color: var(--medium-green);
     }
-        
-    #expandedContent {
+
+    #archiveContent {
         display: none;
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease-out;
     }
 
-    #expandToggle:checked ~ #expandedContent {
+    #archiveToggle:checked ~ #archiveContent {
         display: block;
         text-align: center;
         max-height: 500px; /* Adjust based on content */
+    }
+
+    .archiveEntry {
+        border-left: var(--medium-green) solid 2px;
+        padding-left: 2%;
+        margin: 2%;
+        text-align: left;
+    }
+
+    .archivePrompt {
+        font-weight: bold;
+        color: var(--dark-green);
+        margin-bottom: 4px;
+    }
+
+    .archiveResponse {
+        color: var(--medium-green);
+        font-style: italic;
+        white-space: pre-wrap;
     }
