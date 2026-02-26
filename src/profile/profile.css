@@ -52,7 +52,7 @@
     .authorLevelContainer{
         border: var(--dark-pink) 2px solid;
         border-radius: 5px;
-        background-color: var(--light-pink);
+        background-color: white;
         margin: 2%;
         color: var(--medium-pink);
         box-shadow: 0 4px 8px rgba(73, 44, 52, 0.2);

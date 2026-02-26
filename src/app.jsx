@@ -89,7 +89,7 @@ export default function App() {
                   }} />
                 } />
               <Route path='/feed' element={<Feed userName={userName} />} />
-              <Route path='/profile' element={<Profile />} />
+              <Route path='/profile' element={<Profile username={userName} streak={5} totalBonuses={57} totalCritiques={18} />} />
               <Route path='/about' element={<About />} />
               <Route path='*' element={<NotFound />} />
             </Routes>
