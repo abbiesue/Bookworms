@@ -92,3 +92,5 @@ class ReactionPanel {
 
     setCryCount(count) {this.cryCount = count;}
 }
+
+module.exports = { Response };
