@@ -2,40 +2,84 @@ import React from 'react';
 import { MessageDialog } from './messageDialog';
 
 export function Unauthenticated(props) {
-  const [userName, setUserName] = React.useState(props.userName);
+  const [userName, setUserName] = React.useState(props.userName ?? '');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [displayError, setDisplayError] = React.useState(null);
 
+  // updated login to use service endpoints
   async function loginUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password }),
+    });
+
+    if (response.ok) {
+      const body = await response.json();
+      localStorage.setItem('userName', body.username);
+      props.onLogin(body.username);
+    } else {
+      const body = await response.json();
+      setDisplayError(body.msg);
+    }
   }
 
+  //updated create to use service endpoints
   async function createUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    const response = await fetch('/api/auth/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: userName, email: email, password: password }),
+    });
+
+    if (response.ok) {
+      const body = await response.json();
+      localStorage.setItem('userName', body.username);
+      props.onLogin(body.username);
+    } else {
+      const body = await response.json();
+      setDisplayError(body.msg);
+    }
   }
 
   return (
     <>
       <div className="loginPrompt">
         <h2>Log in to get started:</h2>
-        <form method="get" action="prompt">
-          <div className="mb-3">
-            <label htmlFor="usernameInput" className="form-label">username:</label>
-            <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder='username' />
-          </div>
-          <div>
-            <label htmlFor="passwordInput" className="form-label">password:</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password" />
-          </div>
-          <button onClick={() => loginUser()} disabled={!userName || !password}>
-            Login
-          </button>
-          <button onClick={() => createUser()} disabled={!userName || !password}>
-            Create
-          </button>
-        </form>
+        <div className="mb-3">
+          <label htmlFor="usernameInput" className="form-label">username:</label>
+          <input
+            type="text"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder='username'
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="emailInput" className="form-label">email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='email'
+          />
+        </div>
+        <div>
+          <label htmlFor="passwordInput" className="form-label">password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+          />
+        </div>
+        <button onClick={() => loginUser()} disabled={!email || !password}>
+          Login
+        </button>
+        <button onClick={() => createUser()} disabled={!userName || !email || !password}>
+          Create
+        </button>
       </div>
 
       <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
