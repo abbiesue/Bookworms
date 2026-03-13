@@ -7,11 +7,13 @@ const authCookieName = 'token';
 const { Response } = require('./response');
 const Anthropic = require('@anthropic-ai/sdk');
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const { BonusSet, getWordOfTheDay } = require('./Bonuses');
 
 //space to store all stuff that will be mapped to a database
 let users = [];
 let responses = [];
 let dailyPrompt = { date: null, text: null };
+let userBonuses = [];
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -107,7 +109,57 @@ apiRouter.get('/prompt', verifyAuth, async(req, res) => {
 });
 // ----------------------------------------------
 
-// ------------RESPONSE ENDPOINTS---------------
+// ----------------BONUS ENDPOINTS---------------
+//GetBonuses - gets a bonus set by user, if set does not exist, generate a new one by calling class function.
+apiRouter.get('/bonus', verifyAuth, async (req, res) => {
+    const user = await findUser('token', req.cookies[authCookieName]);
+    let bonusSet = getUserBonuses(user.username);
+    if (!bonusSet) {
+        const word = await getWordOfTheDay();
+        bonusSet = new BonusSet(user.username, word);
+        userBonuses.push(bonusSet);
+    }
+    res.send(bonusSet.getBonuses());
+});
+
+//EvaluateBonuses - evaluates bonus completion by calling claude based on response text and bonus texts
+apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
+    const user = await findUser('token', req.cookies[authCookieName]);
+    const response = getResponse(user.username);
+    const bonusSet = getUserBonuses(user.username);
+    if (response && bonusSet) {
+        const responseText = response.getText();
+        const bonuses = bonusSet.getBonusTexts();
+        const evaluation = await client.messages.create({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 300,
+            messages: [
+                {
+                    role: 'user',
+                    content: `Given this writing response: "${responseText}"
+                        And these bonuses:
+                        1. ${bonuses[0]}
+                        2. ${bonuses[1]}
+                        3. ${bonuses[2]}
+                        Return ONLY a JSON array of exactly 3 boolean values (true/false) indicating whether each bonus was completed, in the same order. Example: [true, false, true]`
+                }
+            ]
+        });
+        try {
+            const results = JSON.parse(evaluation.content[0].text);
+            results.forEach((completed, index) => bonusSet.updateCompletion(index, completed));
+            res.send(bonusSet.getBonuses());
+        } catch (e) {
+            res.status(500).send({ success: false, msg: 'Failed to parse evaluation result' });
+        }
+    } else {
+        res.status(404).send({ success: false, msg: 'Response or bonus set not found' });
+    }
+});
+
+// ----------------------------------------------
+
+// -------------RESPONSE ENDPOINTS---------------
 //SubmitResponse - should not submit response if user is not logged in
 apiRouter.post('/response/submit', verifyAuth, async (req, res) => {
     const { prompt, text } = req.body;
@@ -217,6 +269,10 @@ async function createUser(username, email, password) {
 async function findUser(field, value) {
   if (!value) return null;
   return users.find((u) => u[field] === value);
+}
+
+function getUserBonuses(username) {
+    return userBonuses.find(b => b.username === username);
 }
 
 //setAuthCookie
