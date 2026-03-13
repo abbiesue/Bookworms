@@ -2,14 +2,16 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const uuid = require('uuid');
-const { Response } = require('./response');
 const app = express();
-
 const authCookieName = 'token';
+const { Response } = require('./response');
+const Anthropic = require('@anthropic-ai/sdk');
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 //space to store all stuff that will be mapped to a database
 let users = [];
 let responses = [];
+let dailyPrompt = { date: null, text: null };
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -83,6 +85,27 @@ const verifyResponded = async (req, res, next) => {
         res.status(401).send({ msg: 'Unauthorized' });
     }
 }
+
+// ---------------PROMPT ENDPOINTS---------------
+//GetPrompt - return the daily prompt, if it doesn't exist, call claude to get it
+apiRouter.get('/prompt', verifyAuth, async(req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+    if (dailyPrompt.date !== today) {
+        const response = await client.messages.create({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 300,
+            messages: [
+                {
+                    role: 'user',
+                    content: 'Generate a single creative writing prompt for today. Make it imaginative, specific, and inspiring. Return only the prompt itself, no extra commentary.'
+                }
+            ]
+        });
+        dailyPrompt = { date: today, text: response.content[0].text };
+    }
+    res.send(dailyPrompt.text);
+});
+// ----------------------------------------------
 
 // ------------RESPONSE ENDPOINTS---------------
 //SubmitResponse - should not submit response if user is not logged in
