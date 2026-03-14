@@ -1,15 +1,22 @@
 import React from 'react';
 
-export function CritiqueSection({ initialCritiques, currentUser }) {
-  const [critiques, setCritiques] = React.useState(initialCritiques || []);
+export function CritiqueSection({ author, critiques, currentUser }) {
+  const [critiqueList, setCritiqueList] = React.useState(critiques || []);
   const [newCritique, setNewCritique] = React.useState('');
   const [showCritiques, setShowCritiques] = React.useState(false);
 
-  function handleCritiqueSubmit() {
-    if (newCritique.trim()) {
-      setCritiques(prev => [...prev, { author: currentUser, text: newCritique }]);
-      setNewCritique('');
-    }
+  async function handleCritiqueSubmit() {
+      if (!newCritique.trim()) return;
+      const res = await fetch('/api/response/critique', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ responseAuthor: author, critiqueText: newCritique }),
+      });
+      if (res.ok) {
+          const updated = await res.json();
+          setCritiqueList(updated);
+          setNewCritique('');
+      }
   }
 
   return (
@@ -22,9 +29,9 @@ export function CritiqueSection({ initialCritiques, currentUser }) {
             <div className="critiqueFeed">
                 <div className="existingCritiques">
                     <h4>Critiques:</h4>
-                    {critiques.map((critique, index) => (
+                    {critiqueList.map((critique, index) => (
                     <div className="critique" key={index}>
-                        <div className="critiqueAuthor">{critique.author}</div>
+                        <div className="critiqueAuthor">{critique.username}</div>
                         <div className="critiqueText">{critique.text}</div>
                     </div>
                     ))}

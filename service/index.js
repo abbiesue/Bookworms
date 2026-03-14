@@ -195,13 +195,24 @@ apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) =>
 
 //GetAllResponses - get all stored responses
 apiRouter.get('/response/all', verifyAuth, verifyResponded, async (req, res) => {
-    // send responses back in order they were recieved with the current logged in user's at the top
     const user = await findUser('token', req.cookies[authCookieName]);
     const userResponse = getResponse(user.username);
     const otherResponses = responses
         .filter((r) => r.username !== user.username)
         .sort((a, b) => new Date(a.getTimestamp()) - new Date(b.getTimestamp()));
-    res.send(userResponse ? [userResponse, ...otherResponses] : otherResponses);
+    
+    const allResponses = userResponse ? [userResponse, ...otherResponses] : otherResponses;
+    
+    // format each response so reactions are sent as readable data
+    const formatted = allResponses.map(r => ({
+        username: r.getUsername(),
+        text: r.getText(),
+        timestamp: r.getTimestamp(),
+        reactions: r.getReactions(user.username),
+        critiques: r.getCritiques(),
+    }));
+    
+    res.send(formatted);
 });
 
 //GetUserResponse - get the response of the person logged in
