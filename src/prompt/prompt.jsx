@@ -1,29 +1,50 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ResponseState } from '../profile/responseState';
 import './prompt.css'
 
 export function Prompt(props) {
   const navigate = useNavigate();
-  const [bonuses, setBonuses] = React.useState([
-    'use the word "intergalactic"',
-    "set in the future",
-    "make one character a cowboy",
-  ]);
+
+  const [bonuses, setBonuses] = React.useState([]);
+  React.useEffect(() => {
+    async function fetchBonuses() {
+      const res = await fetch('/api/bonus');
+      if (res.ok) {
+        const data = await res.json();
+        setBonuses(data);
+      }
+    }
+    fetchBonuses();
+  }, []);
+
   const [response, setResponse] = React.useState('');
   const [alreadyResponded, setAlreadyResponded] = React.useState(false);
 
   React.useEffect(() => {
-    if (props.responseState === ResponseState.Responded) {
-      setAlreadyResponded(true);
+    async function checkResponse() {
+      const res = await fetch('/api/response/user');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.responded) {
+          setAlreadyResponded(true);
+          setResponse(data.response.text);
+        }
+      }
     }
+    checkResponse();
   }, []);
 
-  function handlePublish() {
-    localStorage.setItem(`responseState_${props.userName}`, 'responded');
-    localStorage.setItem(`response_${props.userName}`, response);
-    props.onRespond();
-    navigate('/feed');
+  async function handlePublish() {
+    const res = await fetch('/api/response/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: props.dailyPrompt, text: response }),
+    });
+    if (res.ok) {
+      await fetch('/api/bonus/evaluate', { method: 'POST' });
+      props.onRespond();
+      navigate('/feed');
+    }
   }
 
   return (
@@ -35,7 +56,7 @@ export function Prompt(props) {
       <div className="bonusContainer" id="dropSecond">
         <h3><span>daily bonuses:</span></h3>
         {bonuses.map((bonus, index) => (
-          <p key={index}>⭐️ {bonus}</p>
+          <p key={index}>⭐️ {bonus.text}</p>
         ))}
       </div>
       <div className="responseForm" id="dropThird">
