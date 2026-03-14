@@ -9,6 +9,8 @@ const { Response } = require('./response');
 const Anthropic = require('@anthropic-ai/sdk');
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const { BonusSet, getWordOfTheDay } = require('./Bonuses');
+const { ArchiveEntry } = require('./archiveEntry');
+const { loadArchive, addEntry } = require('./archive');
 
 //space to store all stuff that will be mapped to a database
 let users = [];
@@ -17,6 +19,8 @@ let dailyPrompt = { date: null, text: null };
 let userBonuses = [];
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
+scheduleMidnightArchive(); // call once when server starts
 
 app.use(express.json());
 app.use(cookieParser());
@@ -254,6 +258,27 @@ apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, re
 });
 // ---------------------------------------------
 
+// ---------------PROFILE ENDPOINTS-------------
+//GetArchive
+apiRouter.get('/archive', verifyAuth, async (req, res) => {
+    const user = await findUser('token', req.cookies[authCookieName]);
+    const archive = loadArchive();
+    const userEntries = archive.filter(e => e.username === user.username);
+    res.send(userEntries);
+});
+//GetProfileStats
+apiRouter.get('/profile', verifyAuth, async (req, res) => {
+    const user = await findUser('token', req.cookies[authCookieName]);
+    const archive = loadArchive();
+    const userEntries = archive.filter(e => e.username === user.username);
+    const totalCritiques = userEntries.reduce((sum, entry) => sum + entry.critiquesPosted, 0);
+    const totalBonuses = userEntries.reduce((sum, entry) => sum + entry.bonuses.filter(b => b.completed).length, 0);
+    const streak = calculateStreak(user.username);
+    res.send({streak: streak, totalBonuses: totalBonuses, totalCritiques: totalCritiques});
+});
+
+// ---------------------------------------------
+
 //basic error handler
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
@@ -300,6 +325,57 @@ function setAuthCookie(res, authToken) {
     httpOnly: true,
     sameSite: 'strict',
   });
+}
+
+function archiveDay() {
+    const respondedUsers = responses.map(r => r.getUsername());
+
+    respondedUsers.forEach(username => {
+        const response = getResponse(username);
+        const bonusSet = getUserBonuses(username);
+        const critiquesPosted = countCritiques(username);
+        const entry = new ArchiveEntry(response, bonusSet, critiquesPosted);
+        addEntry(entry);
+    });
+}
+
+function countCritiques(username) {
+    return responses
+        .flatMap(r => r.getCritiques())
+        .filter(c => c.username === username)
+        .length;
+}
+
+function scheduleMidnightArchive() {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0); // next midnight
+    const msUntilMidnight = midnight - now;
+
+    setTimeout(() => {
+        archiveDay();
+        scheduleMidnightArchive(); // reschedule for next midnight
+    }, msUntilMidnight);
+}
+
+function daysAgo(n) {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString().split('T')[0];
+}
+
+function calculateStreak(username) {
+    const archive = loadArchive();
+    const userEntries = archive.filter(e => e.username === username);
+    const dates = new Set(userEntries.map(e => e.date));
+    
+    let streak = 0;
+    let day = 1; // start from yesterday
+    while (dates.has(daysAgo(day))) {
+        streak++;
+        day++;
+    }
+    return streak;
 }
 
 app.listen(port, () => {
