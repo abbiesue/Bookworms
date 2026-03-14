@@ -15,14 +15,34 @@ export default function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
-  const [responseState, setResponseState] = React.useState(
-    localStorage.getItem(`responseState_${userName}`) === 'responded'
-      ? ResponseState.Responded
-      : ResponseState.NotResponded
-  );
-  const [dailyPrompt, setDailyPrompt] = React.useState(
-  "Two friends realize they are characters in a comic; one is the hero, one the villain..."
-);
+  const [responseState, setResponseState] = React.useState(ResponseState.Unknown);
+  React.useEffect(() => {
+    async function checkResponseState() {
+      if (authState !== AuthState.Authenticated) {
+        setResponseState(ResponseState.NotResponded);
+        return;
+      }
+      const res = await fetch('/api/response/user');
+      if (res.ok) {
+        const data = await res.json();
+        setResponseState(data.responded ? ResponseState.Responded : ResponseState.NotResponded);
+      }
+    }
+    checkResponseState();
+  }, [authState]);
+
+  const [dailyPrompt, setDailyPrompt] = React.useState('');
+  React.useEffect(() => {
+    async function fetchPrompt() {
+      if (authState !== AuthState.Authenticated) return;
+      const res = await fetch('/api/prompt');
+      if (res.ok) {
+        const text = await res.text();
+        setDailyPrompt(text);
+      }
+    }
+    fetchPrompt();
+  }, [authState]);
 
 
   return (
@@ -75,11 +95,6 @@ export default function App() {
                     onAuthChange={(newUserName, newAuthState) => {
                       setAuthState(newAuthState);
                       setUserName(newUserName);
-                      setResponseState(
-                        localStorage.getItem(`responseState_${newUserName}`) === 'responded'
-                          ? ResponseState.Responded
-                          : ResponseState.NotResponded
-                      );
                     }}
                   />
                 } exact />
