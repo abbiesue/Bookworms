@@ -1,3 +1,4 @@
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const express = require('express');
@@ -93,17 +94,22 @@ const verifyResponded = async (req, res, next) => {
 apiRouter.get('/prompt', verifyAuth, async(req, res) => {
     const today = new Date().toISOString().split('T')[0];
     if (dailyPrompt.date !== today) {
-        const response = await client.messages.create({
-            model: "claude-sonnet-4-20250514",
-            max_tokens: 300,
-            messages: [
-                {
-                    role: 'user',
-                    content: 'Generate a single creative writing prompt for today. Make it imaginative, specific, and inspiring. Return only the prompt itself, no extra commentary.'
-                }
-            ]
-        });
-        dailyPrompt = { date: today, text: response.content[0].text };
+        try {
+            const response = await client.messages.create({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 300,
+                messages: [
+                    {
+                        role: 'user',
+                        content: 'Generate a single creative writing prompt for today. Make it imaginative, specific, and inspiring. Return only the prompt itself, no extra commentary.'
+                    }
+                ]
+            });
+            dailyPrompt = { date: today, text: response.content[0].text };
+        } catch (e) {
+            console.error('Claude API error:', e.message);
+            return res.status(500).send({ msg: e.message });
+        }
     }
     res.send(dailyPrompt.text);
 });
