@@ -115,10 +115,7 @@ export default function App() {
               } />
               <Route path='/profile' element={
                 <Profile 
-                  userName={userName} 
-                  streak={5} 
-                  totalBonuses={57} 
-                  totalCritiques={18} 
+                  userName={userName}
                   dailyPrompt={dailyPrompt} 
                   />
               } />

@@ -100,22 +100,9 @@
         color: var(--dark-pink)
     }
 
-    .bonus input[type="checkbox"]:checked + label .text{
+    .text.completed {
         text-decoration: line-through;
         color: var(--medium-pink);
-    }
-
-    .bonus input[type="checkbox"] {
-        display: none;
-    }
-
-    .bonus label::before {
-        content: "⭐️ ";
-        font-size: 20px;
-    }
-
-    .bonus input[type="checkbox"]:checked + label::before {
-        content: "🌟";
     }
 
     .promptArchive{

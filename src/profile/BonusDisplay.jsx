@@ -1,23 +1,33 @@
+import { useLocation } from 'react-router-dom';
 import React from 'react';
 
-export function BonusDisplay(props) {
+export function BonusDisplay() {
+    const location = useLocation();
+    const [bonuses, setBonuses] = React.useState([]);
+    React.useEffect(() => {
+        async function getBonuses() {
+            const res = await fetch('/api/bonus');
+            if (res.ok) {
+                const data = await res.json();
+                setBonuses(data);
+            }
+        }
+        getBonuses();
+    }, [location]);
+
+    const completedCount = bonuses.filter(b => b.completed).length;
+
     return (
         <div className="dailyBonuses" id="dropThird">
             <span style={{ fontSize: "large" }}>DAILY BONUSES:</span>
-            <span className="bonusProgress">2/3</span>
+            <span className="bonusProgress">{completedCount}/{bonuses.length}</span>
             <ul>
-                <li className="bonus">
-                    <input type="checkbox" id="bonus1" defaultChecked />
-                    <label htmlFor="bonus1"><span className="text">use the word "intergalactic"</span></label>
-                </li>
-                <li className="bonus">
-                    <input type="checkbox" id="bonus2" defaultChecked />
-                    <label htmlFor="bonus2"><span className="text">set in the future</span></label>
-                </li>
-                <li className="bonus">
-                    <input type="checkbox" id="bonus3" />
-                    <label htmlFor="bonus3"><span className="text">make one character a cowboy</span></label>
-                </li>                                                
+                {bonuses.map((bonus, index) => (
+                    <li className="bonus" key={index}>
+                        <span>{bonus.completed ? '🌟' : '⭐️'}</span>
+                        <span className={bonus.completed ? 'text completed' : 'text'}>{bonus.text}</span>
+                    </li>
+                ))}
             </ul>
         </div>
     );
