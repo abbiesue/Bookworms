@@ -138,8 +138,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Calls to third party endpoints** - Backend calls the Anthropic Claude API to generate the daily writing prompt and evaluate bonus completion, and calls the Wordnik API to get the word of the day for bonus generation.
 - [x] **Backend service endpoints** - I created endpoints for authentication, daily prompt generation, bonus generation and evaluation, response submission and editing, reactions, critiques, archive, and profile stats.
 - [x] **Frontend calls service endpoints** - All frontend components fetch from the backend — prompt, bonuses, responses, reactions, critiques, archive, and profile stats are all retrieved from and stored on the backend instead of localStorage.
-- [x] **Supports registration, login, logout, and restricted endpoint** - Users can register with username, email, and password, login with username, email and password, and logout. Protected endpoints use `verifyAuth` middleware and `verifyResponded` 
-middleware to restrict access.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Users can register with username, email, and password, login with username, email and password, and logout. Protected endpoints use `verifyAuth` middleware and `verifyResponded` middleware to restrict access.
 
 ## 🚀 DB deliverable
 
