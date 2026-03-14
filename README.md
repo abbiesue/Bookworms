@@ -133,12 +133,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - I created an Express service in `index.js` running on port 4000 that serves the application.
+- [x] **Static middleware for frontend** - I used `express.static('public')` middleware to serve the frontend static files.
+- [x] **Calls to third party endpoints** - Backend calls the Anthropic Claude API to generate the daily writing prompt and evaluate bonus completion, and calls the Wordnik API to get the word of the day for bonus generation.
+- [x] **Backend service endpoints** - I created endpoints for authentication, daily prompt generation, bonus generation and evaluation, response submission and editing, reactions, critiques, archive, and profile stats.
+- [x] **Frontend calls service endpoints** - All frontend components fetch from the backend — prompt, bonuses, responses, reactions, critiques, archive, and profile stats are all retrieved from and stored on the backend instead of localStorage.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Users can register with username, email, and password, login with username, email and password, and logout. Protected endpoints use `verifyAuth` middleware and `verifyResponded` 
+middleware to restrict access.
 
 ## 🚀 DB deliverable
 
