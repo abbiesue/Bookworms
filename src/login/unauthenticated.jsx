@@ -6,13 +6,14 @@ export function Unauthenticated(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [displayError, setDisplayError] = React.useState(null);
+  const [isCreating, setIsCreating] = React.useState(false);
 
   // updated login to use service endpoints
   async function loginUser() {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({ username: userName, password: password }),
     });
 
     if (response.ok) {
@@ -56,7 +57,8 @@ export function Unauthenticated(props) {
             placeholder='username'
           />
         </div>
-        <div className="mb-3">
+        {isCreating && (
+          <div className="mb-3">
           <label htmlFor="emailInput" className="form-label">email:</label>
           <input
             type="email"
@@ -65,6 +67,7 @@ export function Unauthenticated(props) {
             placeholder='email'
           />
         </div>
+        )}
         <div>
           <label htmlFor="passwordInput" className="form-label">password:</label>
           <input
@@ -74,12 +77,21 @@ export function Unauthenticated(props) {
             placeholder="password"
           />
         </div>
-        <button onClick={() => loginUser()} disabled={!email || !password}>
-          Login
-        </button>
-        <button onClick={() => createUser()} disabled={!userName || !email || !password}>
-          Create
-        </button>
+        {isCreating ? (
+          <button onClick={() => createUser()} disabled={!userName || !email || !password}>
+            Create
+          </button>
+        ) : (
+          <button onClick={() => loginUser()} disabled={!userName || !password}>
+            Login
+          </button>
+        )}
+        <p className="createToggle">
+          {isCreating ? 'Already have an account? ' : 'New here? '}
+          <button onClick={() => setIsCreating(!isCreating)}>
+              {isCreating ? 'Login' : 'Create Account'}
+          </button>
+        </p>
       </div>
 
       <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />

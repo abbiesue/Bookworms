@@ -51,6 +51,10 @@
     transition: all 0.3s ease;
 }
 
+.createToggle {
+    background-color: var(--light-green);
+}
+
 main {
     text-align: center;
 }
