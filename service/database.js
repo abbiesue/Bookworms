@@ -124,4 +124,11 @@ module.exports = {
     addUser,
     updateUser,
     removeUserToken,
+    getResponse, 
+    getAllTodayResponses,
+    addResponse,
+    updateResponseText,
+    updateResponseReaction,
+    addCritique,
+    deleteTodayResponses,
 };
