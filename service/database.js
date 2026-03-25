@@ -26,10 +26,25 @@ const bonusCollection = db.collection('bonuses')
 
 //--------USER FUNCTIONS--------
 //get
-//add
-//update
-//remove
+function getUser(field, value) {
+    if (!value) return null;
+    return userCollection.findOne({[field] : value});
+}
 
+//add
+async function addUser(user) {
+    await userCollection.insertOne(user);
+}
+
+//update
+async function updateUser(user) {
+    await userCollection.updateOne({username: user.username}, {$set: user});
+}
+
+//remove
+async function removeUserToken(user) {
+    await userCollection.updateOne({username: user.username},{$unset: {token: 1}});
+}
 //------------------------------
 
 //------RESPONSE FUNCTIONS------
