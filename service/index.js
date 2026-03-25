@@ -5,15 +5,16 @@ const express = require('express');
 const uuid = require('uuid');
 const app = express();
 const authCookieName = 'token';
-const { Response } = require('./Response');
+const DB = require('./database.js')
 const Anthropic = require('@anthropic-ai/sdk');
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const { BonusSet, getWordOfTheDay } = require('./Bonuses');
+
+const { Response } = require('./Response');
 const { ArchiveEntry } = require('./archiveEntry');
 const { loadArchive, addEntry } = require('./archive');
 
 //space to store all stuff that will be mapped to a database
-let users = [];
 let responses = [];
 let dailyPrompt = { date: null, text: null };
 let userBonuses = [];
@@ -32,9 +33,9 @@ app.use(`/api`, apiRouter);
 // ---------------LOGIN ENDPOINTS---------------
 //CreateAuth - register a new user
 apiRouter.post('/auth/create', async (req, res) => {
-    if (await findUser('email', req.body.email)) {
+    if (await DB.getUser('email', req.body.email)) {
         res.status(409).send({ msg: 'Email already in use' });
-    } else if (await findUser('username', req.body.username)) {
+    } else if (await DB.getUser('username', req.body.username)) {
         res.status(409).send({ msg: 'Username already taken' });
     } else {
         const user = await createUser(req.body.username, req.body.email, req.body.password);
@@ -45,13 +46,12 @@ apiRouter.post('/auth/create', async (req, res) => {
 
 //GetAuth - login an existing user
 apiRouter.post('/auth/login', async (req, res) => {
-    const user = await findUser('username', req.body.username);
+    const user = await DB.getUser('username', req.body.username);
     if (user) {
         if (await bcrypt.compare(req.body.password, user.password)) {
         user.token = uuid.v4();
         setAuthCookie(res, user.token);
-        res.send({ username: user.username, email: user.email });
-        return;
+        return res.send({ username: user.username, email: user.email });
         }
     }
     res.status(401).send({ msg: 'Invalid username or password' });
@@ -59,9 +59,9 @@ apiRouter.post('/auth/login', async (req, res) => {
 
 //DeleteAuth - logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     if (user) {
-        delete user.token;
+        DB.removeUserToken(user);
     }
     res.clearCookie(authCookieName);
     res.status(204).end();
@@ -70,8 +70,8 @@ apiRouter.delete('/auth/logout', async (req, res) => {
 
 //verifyAuth - verify a user is authorized to call an endpoint
 const verifyAuth = async (req, res, next) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
-    if (user) {
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
+    if (user){
         next();
     } else {
         res.status(401).send({ msg: 'Unauthorized' });
@@ -80,7 +80,7 @@ const verifyAuth = async (req, res, next) => {
 
 //verifyResponded = verify a user has responded before calling an endpoint
 const verifyResponded = async (req, res, next) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = req.user || await DB.getUser('token', req.cookies[authCookieName]);
     if (user) {
         const userResponse = getResponse(user.username);
         if (userResponse) {
@@ -122,7 +122,7 @@ apiRouter.get('/prompt', verifyAuth, async(req, res) => {
 // ----------------BONUS ENDPOINTS---------------
 //GetBonuses - gets a bonus set by user, if set does not exist, generate a new one by calling class function.
 apiRouter.get('/bonus', verifyAuth, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     let bonusSet = getUserBonuses(user.username);
     if (!bonusSet) {
         const word = await getWordOfTheDay();
@@ -134,7 +134,7 @@ apiRouter.get('/bonus', verifyAuth, async (req, res) => {
 
 //EvaluateBonuses - evaluates bonus completion by calling claude based on response text and bonus texts
 apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const response = getResponse(user.username);
     const bonusSet = getUserBonuses(user.username);
     if (response && bonusSet) {
@@ -173,7 +173,7 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
 //SubmitResponse - should not submit response if user is not logged in
 apiRouter.post('/response/submit', verifyAuth, async (req, res) => {
     const { prompt, text } = req.body;
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const username = user.username;
     const response = new Response(username, prompt, text);
     responses.push(response);
@@ -182,7 +182,7 @@ apiRouter.post('/response/submit', verifyAuth, async (req, res) => {
 
 //EditResponse - endpoint for editing the response text
 apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const text = req.body.text;
     const response = getResponse(user.username);
     if (response) {
@@ -199,7 +199,7 @@ apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) =>
 
 //GetAllResponses - get all stored responses
 apiRouter.get('/response/all', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const userResponse = getResponse(user.username);
     const otherResponses = responses
         .filter((r) => r.username !== user.username)
@@ -221,7 +221,7 @@ apiRouter.get('/response/all', verifyAuth, verifyResponded, async (req, res) => 
 
 //GetUserResponse - get the response of the person logged in
 apiRouter.get('/response/user', verifyAuth, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const userResponse = getResponse(user.username);
     if (userResponse) {
         res.send({ responded: true, response: userResponse });
@@ -236,7 +236,7 @@ apiRouter.post('/response/reaction', verifyAuth, verifyResponded,async (req, res
   const authorResponse = getResponse(responseAuthor);
   if (authorResponse) {
     const reactionType = req.body.reactionType;
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     authorResponse.updateReaction(reactionType, user.username);
     res.status(201).send(authorResponse.getReactions(user.username));
   } else {
@@ -246,7 +246,7 @@ apiRouter.post('/response/reaction', verifyAuth, verifyResponded,async (req, res
 
 //AddCritique
 apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const { responseAuthor, critiqueText } = req.body;
     const response = getResponse(responseAuthor);
     if (response) {
@@ -261,14 +261,14 @@ apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, re
 // ---------------PROFILE ENDPOINTS-------------
 //GetArchive
 apiRouter.get('/archive', verifyAuth, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const archive = loadArchive();
     const userEntries = archive.filter(e => e.username === user.username);
     res.send(userEntries);
 });
 //GetProfileStats
 apiRouter.get('/profile', verifyAuth, async (req, res) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
+    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const archive = loadArchive();
     const userEntries = archive.filter(e => e.username === user.username);
     const totalCritiques = userEntries.reduce((sum, entry) => sum + entry.critiquesPosted, 0);
@@ -305,12 +305,6 @@ async function createUser(username, email, password) {
   };
   users.push(user);
   return user;
-}
-
-//findUser
-async function findUser(field, value) {
-  if (!value) return null;
-  return users.find((u) => u[field] === value);
 }
 
 function getUserBonuses(username) {
