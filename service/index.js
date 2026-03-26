@@ -10,10 +10,6 @@ const Anthropic = require('@anthropic-ai/sdk');
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const { BonusSet, getWordOfTheDay } = require('./Bonuses');
 
-const { Response } = require('./Response');
-const { ArchiveEntry } = require('./archiveEntry');
-const { loadArchive, addEntry } = require('./archive');
-
 //space to store all stuff that will be mapped to a database
 let dailyPrompt = { date: null, text: null };
 
@@ -118,22 +114,26 @@ apiRouter.get('/prompt', verifyAuth, async(req, res) => {
 // ----------------BONUS ENDPOINTS---------------
 //GetBonuses - gets a bonus set by user, if set does not exist, generate a new one by calling class function.
 apiRouter.get('/bonus', verifyAuth, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    let bonusSet = getUserBonuses(user.username);
-    if (!bonusSet) {
+    let bonusDoc = await DB.getUserBonuses(req.user.username);
+    if (!bonusDoc) {
         const word = await getWordOfTheDay();
-        bonusSet = new BonusSet(user.username, word);
-        userBonuses.push(bonusSet);
+        const bonusSet = new BonusSet(user.username, word);
+        bonusDoc = {
+            username: bonusSet.getUsername(),
+            date: bonusSet.getDate(),
+            bonuses: bonusSet.getBonuses(),
+        };
+        await DB.updateUserBonuses(bonusDoc);
     }
-    res.send(bonusSet.getBonuses());
+    res.send(bonusDoc.bonuses);
 });
 
 //EvaluateBonuses - evaluates bonus completion by calling claude based on response text and bonus texts
 apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
-    const response = DB.getResponse(req.user.username);
-    const bonusSet = getUserBonuses(user.username);
+    const response = await DB.getResponse(req.user.username);
+    const bonusSet = await DB.getUserBonuses(req.user.username);
     if (response && bonusSet) {
-        const bonuses = bonusSet.getBonusTexts();
+        const bonuses = bonusSet.bonuses.map(b => b.text);
         const evaluation = await client.messages.create({
             model: "claude-sonnet-4-20250514",
             max_tokens: 300,
@@ -156,6 +156,7 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
                     bonusSet.bonuses[index].completed = completed;
                 }
             });
+            await DB.updateUserBonuses(bonusDoc);
             res.send(bonusSet.getBonuses());
         } catch (e) {
             res.status(500).send({ success: false, msg: 'Failed to parse evaluation result' });
@@ -288,10 +289,6 @@ async function createUser(username, email, password) {
   return user;
 }
 
-function getUserBonuses(username) {
-    return userBonuses.find(b => b.username === username);
-}
-
 //setAuthCookie
 function setAuthCookie(res, authToken) {
   res.cookie(authCookieName, authToken, {
@@ -318,21 +315,27 @@ function formatReactions(panel, username) {
 
 async function archiveDay() {
     const responses = await DB.getAllTodayResponses();
-    const respondedUsers = responses.map(r => r.getUsername());
-
-    respondedUsers.forEach(async username => {
-        const response = DB.getResponse(username);
-        const bonusSet = getUserBonuses(username);
-        const critiquesPosted = countCritiques(username);
-        const entry = new ArchiveEntry(response, bonusSet, critiquesPosted);
+    for (const response of responses) {
+        const bonusSet = await DB.getUserBonuses(response.username);
+        const bonusesCompleted = bonusSet ? bonusSet.bonuses.filter(b => b.completed).length:0;
+        const critiquesPosted = countCritiques(responses, response.username);
+        const entry = {
+            username: response.username,
+            date: response.date,
+            prompt: response.prompt,
+            text: response.text,
+            bonusesCompleted,
+            critiquesPosted,
+        };
         await DB.addArchiveEntry(entry);
-    });
-     await DB.deleteTodayResponses();
+    }
+    await DB.deleteTodayResponses();
+    await DB.deleteTodayBonuses();
 }
 
-function countCritiques(username) {
+function countCritiques(responses, username) {
     return responses
-        .flatMap(r => r.critiques)
+        .flatMap(r => r.critiques || [])
         .filter(c => c.username === username)
         .length;
 }
