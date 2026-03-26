@@ -122,9 +122,22 @@ async function addArchiveEntry(entry) {
 
 //-------BONUSES FUNCTIONS------
 //get
-//add
+function getUserBonuses(username) {
+    const today = new Date().toISOString().split('T')[0];
+    return bonusCollection.findOne({username, date: today});
+}
+
 //update
+async function updateUserBonuses(bonusData) {
+    const today = new Date().toISOString().split('T')[0];
+    await bonusCollection.updateOne({username: bonusData.username, date: today}, {$set: bonusData}, {upsert: true});
+}
+
 //remove
+async function deleteTodayBonuses() {
+    const today = new Date().toISOString().split('T')[0];
+    await bonusCollection.deleteMany({date: today});
+}
 //------------------------------
 
 module.exports = {
@@ -142,4 +155,7 @@ module.exports = {
     addArchiveEntry,
     getUserArchive,
     getFullArchive,
+    getUserBonuses,
+    updateUserBonuses,
+    deleteTodayBonuses,
 };
