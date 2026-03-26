@@ -16,7 +16,6 @@ const { loadArchive, addEntry } = require('./archive');
 
 //space to store all stuff that will be mapped to a database
 let dailyPrompt = { date: null, text: null };
-let userBonuses = [];
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -252,19 +251,15 @@ apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, re
 // ---------------PROFILE ENDPOINTS-------------
 //GetArchive
 apiRouter.get('/archive', verifyAuth, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const archive = loadArchive();
-    const userEntries = archive.filter(e => e.username === user.username);
-    res.send(userEntries);
+    const entries = await DB.getUserArchive(req.user.username);
+    res.send(entries);
 });
 //GetProfileStats
 apiRouter.get('/profile', verifyAuth, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const archive = loadArchive();
-    const userEntries = archive.filter(e => e.username === user.username);
-    const totalCritiques = userEntries.reduce((sum, entry) => sum + entry.critiquesPosted, 0);
-    const totalBonuses = userEntries.reduce((sum, entry) => sum + entry.bonuses.filter(b => b.completed).length, 0);
-    const streak = calculateStreak(user.username);
+    const archive = await DB.getUserArchive(req.user.username);
+    const totalCritiques = archive.reduce((sum, entry) => sum + (entry.critiquesPosted || 0), 0);
+    const totalBonuses = archive.reduce((sum, entry) => sum + (entry.bonusesCompleted || 0), 0);
+    const streak = calculateStreak(archive);
     res.send({streak: streak, totalBonuses: totalBonuses, totalCritiques: totalCritiques});
 });
 
@@ -307,16 +302,30 @@ function setAuthCookie(res, authToken) {
   });
 }
 
+function formatReactions(panel, username) {
+    const p = panel || { likes: [], laughs: [], cries: [] };
+    return {
+        likeCount: p.likes.length,
+        laughCount: p.laughs.length,
+        cryCount: p.cries.length,
+        userReacted: {
+            like: p.likes.includes(username),
+            laugh: p.laughs.includes(username),
+            cry: p.cries.includes(username),
+        }
+    };
+}
+
 async function archiveDay() {
     const responses = await DB.getAllTodayResponses();
     const respondedUsers = responses.map(r => r.getUsername());
 
-    respondedUsers.forEach(username => {
+    respondedUsers.forEach(async username => {
         const response = DB.getResponse(username);
         const bonusSet = getUserBonuses(username);
         const critiquesPosted = countCritiques(username);
         const entry = new ArchiveEntry(response, bonusSet, critiquesPosted);
-        addEntry(entry);
+        await DB.addArchiveEntry(entry);
     });
      await DB.deleteTodayResponses();
 }
@@ -346,10 +355,8 @@ function daysAgo(n) {
     return d.toISOString().split('T')[0];
 }
 
-function calculateStreak(username) {
-    const archive = loadArchive();
-    const userEntries = archive.filter(e => e.username === username);
-    const dates = new Set(userEntries.map(e => e.date));
+function calculateStreak(archiveEntries) {
+    const dates = new Set(archiveEntries.map(e => e.date));
     
     let streak = 0;
     let day = 1; // start from yesterday
