@@ -77,7 +77,7 @@ async function updateResponseReaction(username, reactionType, reactingUser) {
     const today = new Date().toISOString().split('T')[0];
     const response = await responseCollection.findOne({username, date: today});
     if (!response) return null;
-    const panel = response.reactions || {likes: [], laugh: [], cries: []};
+    const panel = response.reactions || {likes: [], laughs: [], cries: []};
     const arrayField = reactionType === 'like' ? 'likes'
         : reactionType === 'laugh' ? 'laughs'
         : 'cries';
@@ -95,7 +95,7 @@ async function updateResponseReaction(username, reactionType, reactingUser) {
 async function addCritique(username, critiqueObj) {
     const today = new Date().toISOString().split('T')[0];
     await responseCollection.updateOne({username, date: today}, {$push: {critiques: critiqueObj}});
-    const updated = await responseCollection.findOne({ username, dat: today});
+    const updated = await responseCollection.findOne({ username, date: today});
     return updated?.critiques || [];
 }
 //remove

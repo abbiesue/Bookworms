@@ -44,6 +44,7 @@ apiRouter.post('/auth/login', async (req, res) => {
     if (user) {
         if (await bcrypt.compare(req.body.password, user.password)) {
         user.token = uuid.v4();
+        await DB.updateUser(user); 
         setAuthCookie(res, user.token);
         return res.send({ username: user.username, email: user.email });
         }
@@ -55,7 +56,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 apiRouter.delete('/auth/logout', async (req, res) => {
     const user = await DB.getUser('token', req.cookies[authCookieName]);
     if (user) {
-        DB.removeUserToken(user);
+        await DB.removeUserToken(user);
     }
     res.clearCookie(authCookieName);
     res.status(204).end();
@@ -65,6 +66,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
 //verifyAuth - verify a user is authorized to call an endpoint
 const verifyAuth = async (req, res, next) => {
     const user = await DB.getUser('token', req.cookies[authCookieName]);
+    req.user = user;
     if (user){
         next();
     } else {
@@ -77,7 +79,7 @@ const verifyResponded = async (req, res, next) => {
     const user = req.user || await DB.getUser('token', req.cookies[authCookieName]);
     if (!user) return res.status(401).send({ msg: 'Unauthorized' });
 
-    const userResponse = DB.getResponse(user.username);
+    const userResponse = await DB.getResponse(user.username);
     if (userResponse) {
         next();
     } else {
@@ -117,7 +119,7 @@ apiRouter.get('/bonus', verifyAuth, async (req, res) => {
     let bonusDoc = await DB.getUserBonuses(req.user.username);
     if (!bonusDoc) {
         const word = await getWordOfTheDay();
-        const bonusSet = new BonusSet(user.username, word);
+        const bonusSet = new BonusSet(req.user.username, word);
         bonusDoc = {
             username: bonusSet.getUsername(),
             date: bonusSet.getDate(),
@@ -156,8 +158,8 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
                     bonusSet.bonuses[index].completed = completed;
                 }
             });
-            await DB.updateUserBonuses(bonusDoc);
-            res.send(bonusSet.getBonuses());
+            await DB.updateUserBonuses(bonusSet);
+            res.send(bonusSet.bonuses);
         } catch (e) {
             res.status(500).send({ success: false, msg: 'Failed to parse evaluation result' });
         }
@@ -191,9 +193,9 @@ apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) =>
     const today = new Date().toISOString().split('T')[0];
     const response = await DB.getResponse(req.user.username);
     if (response) {
-        if (userResponse.date !== today) return res.status(403).send({ msg: 'Cannot edit a previous day\'s response' });
+        if (response.date !== today) return res.status(403).send({ msg: 'Cannot edit a previous day\'s response' });
         await DB.updateResponseText(req.user.username, req.body.text);
-        res.send({ ...userResponse, text: req.body.text });
+        res.send({ ...response, text: req.body.text });
     } else {
         res.status(404).send({ msg: 'Response not found' });
     }
@@ -285,7 +287,7 @@ async function createUser(username, email, password) {
     password: passwordHash,
     token: uuid.v4(),
   };
-  users.push(user);
+  await DB.addUser(user);
   return user;
 }
 
