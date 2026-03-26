@@ -15,7 +15,6 @@ const { ArchiveEntry } = require('./archiveEntry');
 const { loadArchive, addEntry } = require('./archive');
 
 //space to store all stuff that will be mapped to a database
-let responses = [];
 let dailyPrompt = { date: null, text: null };
 let userBonuses = [];
 
@@ -81,15 +80,13 @@ const verifyAuth = async (req, res, next) => {
 //verifyResponded = verify a user has responded before calling an endpoint
 const verifyResponded = async (req, res, next) => {
     const user = req.user || await DB.getUser('token', req.cookies[authCookieName]);
-    if (user) {
-        const userResponse = getResponse(user.username);
-        if (userResponse) {
-            next();
-        } else {
-            res.status(403).send({ msg: 'User has not responded' });
-        }
+    if (!user) return res.status(401).send({ msg: 'Unauthorized' });
+
+    const userResponse = DB.getResponse(user.username);
+    if (userResponse) {
+        next();
     } else {
-        res.status(401).send({ msg: 'Unauthorized' });
+        res.status(403).send({ msg: 'User has not responded' });
     }
 }
 
@@ -134,11 +131,9 @@ apiRouter.get('/bonus', verifyAuth, async (req, res) => {
 
 //EvaluateBonuses - evaluates bonus completion by calling claude based on response text and bonus texts
 apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const response = getResponse(user.username);
+    const response = DB.getResponse(req.user.username);
     const bonusSet = getUserBonuses(user.username);
     if (response && bonusSet) {
-        const responseText = response.getText();
         const bonuses = bonusSet.getBonusTexts();
         const evaluation = await client.messages.create({
             model: "claude-sonnet-4-20250514",
@@ -146,7 +141,7 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
             messages: [
                 {
                     role: 'user',
-                    content: `Given this writing response: "${responseText}"
+                    content: `Given this writing response: "${response.text}"
                         And these bonuses:
                         1. ${bonuses[0]}
                         2. ${bonuses[1]}
@@ -157,7 +152,11 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
         });
         try {
             const results = JSON.parse(evaluation.content[0].text);
-            results.forEach((completed, index) => bonusSet.updateCompletion(index, completed));
+            results.forEach((completed, index) => {
+                if (bonusSet.bonuses[index] !== undefined) {
+                    bonusSet.bonuses[index].completed = completed;
+                }
+            });
             res.send(bonusSet.getBonuses());
         } catch (e) {
             res.status(500).send({ success: false, msg: 'Failed to parse evaluation result' });
@@ -173,25 +172,28 @@ apiRouter.post('/bonus/evaluate', verifyAuth, async (req, res) => {
 //SubmitResponse - should not submit response if user is not logged in
 apiRouter.post('/response/submit', verifyAuth, async (req, res) => {
     const { prompt, text } = req.body;
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const username = user.username;
-    const response = new Response(username, prompt, text);
-    responses.push(response);
-    res.status(201).send(response);
+    const today = new Date().toISOString().split('T')[0];
+    const responseData = {
+        username: req.user.username,
+        prompt,
+        text,
+        date: today,
+        timestamp: new Date().toISOString(),
+        reactions: { likes: [], laughs: [], cries: [] },
+        critiques: [],
+    };
+    await DB.addResponse(responseData);
+    res.status(201).send(responseData);
 });
 
 //EditResponse - endpoint for editing the response text
 apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const text = req.body.text;
-    const response = getResponse(user.username);
+    const today = new Date().toISOString().split('T')[0];
+    const response = await DB.getResponse(req.user.username);
     if (response) {
-        const today = new Date().toISOString().split('T')[0];
-        if (response.getDate() !== today) {
-            return res.status(403).send({ msg: 'Cannot edit a previous day\'s response' });
-        }
-        response.updateText(text);
-        res.send(response);
+        if (userResponse.date !== today) return res.status(403).send({ msg: 'Cannot edit a previous day\'s response' });
+        await DB.updateResponseText(req.user.username, req.body.text);
+        res.send({ ...userResponse, text: req.body.text });
     } else {
         res.status(404).send({ msg: 'Response not found' });
     }
@@ -199,30 +201,25 @@ apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) =>
 
 //GetAllResponses - get all stored responses
 apiRouter.get('/response/all', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const userResponse = getResponse(user.username);
-    const otherResponses = responses
-        .filter((r) => r.username !== user.username)
-        .sort((a, b) => new Date(a.getTimestamp()) - new Date(b.getTimestamp()));
-    
-    const allResponses = userResponse ? [userResponse, ...otherResponses] : otherResponses;
-    
-    // format each response so reactions are sent as readable data
+    const allResponses = await DB.getAllTodayResponses();
     const formatted = allResponses.map(r => ({
-        username: r.getUsername(),
-        text: r.getText(),
-        timestamp: r.getTimestamp(),
-        reactions: r.getReactions(user.username),
-        critiques: r.getCritiques(),
+        username: r.username,
+        text: r.text,
+        timestamp: r.timestamp,
+        reactions: formatReactions(r.reactions, req.user.username),
+        critiques: r.critiques,
     }));
-    
+    const userIdx = formatted.findIndex(r => r.username === req.user.username);
+    if (userIdx > 0) {
+        const [userEntry] = formatted.splice(userIdx, 1);
+        formatted.unshift(userEntry);
+    }
     res.send(formatted);
 });
 
 //GetUserResponse - get the response of the person logged in
 apiRouter.get('/response/user', verifyAuth, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    const userResponse = getResponse(user.username);
+    const userResponse = await DB.getResponse(req.user.username);
     if (userResponse) {
         res.send({ responded: true, response: userResponse });
     } else {
@@ -232,29 +229,23 @@ apiRouter.get('/response/user', verifyAuth, async (req, res) => {
 
 //AddReaction - changes the reaction 
 apiRouter.post('/response/reaction', verifyAuth, verifyResponded,async (req, res) => {
-  const responseAuthor = req.body.responseAuthor;
-  const authorResponse = getResponse(responseAuthor);
-  if (authorResponse) {
-    const reactionType = req.body.reactionType;
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
-    authorResponse.updateReaction(reactionType, user.username);
-    res.status(201).send(authorResponse.getReactions(user.username));
-  } else {
-    res.status(404).send({ msg: 'Response not found' });
-  }
+    const {responseAuthor, reactionType} = req.body;
+    const panel = await DB.updateResponseReaction(responseAuthor, reactionType, req.user.username);
+    if (!panel) return res.status(404).send({ msg: 'Response not found' });
+    res.status(201).send(formatReactions(panel, req.user.username));
 });
 
 //AddCritique
 apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, res) => {
-    const user = await DB.getUser('token', req.cookies[authCookieName]);
     const { responseAuthor, critiqueText } = req.body;
-    const response = getResponse(responseAuthor);
-    if (response) {
-        response.addCritique(user.username, critiqueText);
-        res.send(response.getCritiques());
-    } else {
-        res.status(404).send({ msg: 'Response not found' });
+    const critiqueObj = {
+        username: req.user.username,
+        text: critiqueText,
+        date: new Date().toISOString(),
     }
+    const critiques = await DB.addCritique(responseAuthor, critiqueObj);
+    if (!critiques) return res.status(404).send({ msg: 'Response not found' });
+    res.send(critiques);
 });
 // ---------------------------------------------
 
@@ -289,11 +280,6 @@ app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-//getResponse - get a response by username
-function getResponse(username) {
-  return responses.find((r) => r.username === username);
-}
-
 //createUser
 async function createUser(username, email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
@@ -321,21 +307,23 @@ function setAuthCookie(res, authToken) {
   });
 }
 
-function archiveDay() {
+async function archiveDay() {
+    const responses = await DB.getAllTodayResponses();
     const respondedUsers = responses.map(r => r.getUsername());
 
     respondedUsers.forEach(username => {
-        const response = getResponse(username);
+        const response = DB.getResponse(username);
         const bonusSet = getUserBonuses(username);
         const critiquesPosted = countCritiques(username);
         const entry = new ArchiveEntry(response, bonusSet, critiquesPosted);
         addEntry(entry);
     });
+     await DB.deleteTodayResponses();
 }
 
 function countCritiques(username) {
     return responses
-        .flatMap(r => r.getCritiques())
+        .flatMap(r => r.critiques)
         .filter(c => c.username === username)
         .length;
 }
