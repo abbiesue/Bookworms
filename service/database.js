@@ -6,10 +6,10 @@ const client = new MongoClient(url);
 const db = client.db('bookworms');
 
 //collections needed: users, responses, archive, and bonuses
-const userCollection = db.collection('users')
-const responseCollection = db.collection('responses')
-const archiveCollection = db.collection('archive')
-const bonusCollection = db.collection('bonuses')
+const userCollection = db.collection('users');
+const responseCollection = db.collection('responses');
+const archiveCollection = db.collection('archive');
+const bonusCollection = db.collection('bonuses');
 
 // This will asynchronously test the connection and exit the process if it fails (copied from simon project code)
 (async function testConnection() {
