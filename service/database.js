@@ -26,30 +26,30 @@ const bonusCollection = db.collection('bonuses')
 
 //--------USER FUNCTIONS--------
 //get
-function getUser(field, value){
+function getUser(field, value) {
     if (!value) return null;
     return userCollection.findOne({[field] : value});
 }
 
 //add
-async function addUser(user){
+async function addUser(user) {
     await userCollection.insertOne(user);
 }
 
 //update
-async function updateUser(user){
+async function updateUser(user) {
     await userCollection.updateOne({username: user.username}, {$set: user});
 }
 
 //remove
-async function removeUserToken(user){
+async function removeUserToken(user) {
     await userCollection.updateOne({username: user.username},{$unset: {token: 1}});
 }
 //------------------------------
 
 //------RESPONSE FUNCTIONS------
 //get
-function getResponse(username){
+function getResponse(username) {
     const today = new Date().toISOString().split('T')[0];
     return responseCollection.findOne({username, date: today});
 }
@@ -60,12 +60,12 @@ async function getAllTodayResponses() {
 }
 
 //add
-async function addResponse(responseData){
+async function addResponse(responseData) {
     await responseCollection.insertOne(responseData);
 }
 
 //update
-async function updateResponseText(username, text){
+async function updateResponseText(username, text) {
     const today = new Date().toISOString().split('T')[0];
     await responseCollection.updateOne(
         { username, date: today },
@@ -107,9 +107,17 @@ async function deleteTodayResponses() {
 
 //-------ARCHIVE FUNCTIONS------
 //get
+async function getUserArchive(username) {
+    return archiveCollection.find({username}).sort({date: -1}).toArray();
+}
+
+async function getFullArchive() {
+    return archiveCollection.find({}).toArray();
+}
 //add
-//update
-//remove
+async function addArchiveEntry(entry) {
+    return archiveCollection.insertOne(entry);
+}
 //------------------------------
 
 //-------BONUSES FUNCTIONS------
@@ -131,4 +139,7 @@ module.exports = {
     updateResponseReaction,
     addCritique,
     deleteTodayResponses,
+    addArchiveEntry,
+    getUserArchive,
+    getFullArchive,
 };
