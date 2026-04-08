@@ -187,6 +187,7 @@ apiRouter.post('/response/submit', verifyAuth, async (req, res) => {
         critiques: [],
     };
     await DB.addResponse(responseData);
+    broadcast({ type: 'new_response', username: responseData.username, text: responseData.text, timestamp: responseData.timestamp });
     res.status(201).send(responseData);
 });
 
@@ -394,6 +395,13 @@ wss.on('connection', (ws) => {
         if (ws.username) clients.delete(ws.username);
     });
 });
+
+function broadcast(payload) {
+    const data = JSON.stringify(payload);
+    for (const [, client] of clients) {
+        if (client.readyState === 1) client.send(data);
+    }
+}
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
