@@ -374,6 +374,27 @@ function calculateStreak(archiveEntries) {
     return streak;
 }
 
-app.listen(port, () => {
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+const clients = new Map();
+
+wss.on('connection', (ws) => {
+    ws.username = null;
+
+    ws.on('message', (raw) => {
+        const msg = JSON.parse(raw);
+        if (msg.type === 'register') {
+            ws.username = msg.username;
+            clients.set(msg.username, ws);
+        }
+    });
+
+    ws.on('close', () => {
+        if (ws.username) clients.delete(ws.username);
+    });
+});
+
+server.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
