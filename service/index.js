@@ -9,6 +9,8 @@ const DB = require('./database.js')
 const Anthropic = require('@anthropic-ai/sdk');
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const { BonusSet, getWordOfTheDay } = require('./Bonuses');
+const http = require('http');
+const { WebSocketServer } = require('ws');
 
 //space to store all stuff that will be mapped to a database
 let dailyPrompt = { date: null, text: null };
