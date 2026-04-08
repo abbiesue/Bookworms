@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponseCard } from './responseCard';
+import { useWebSocket } from '../useWebSocket';
 import './feed.css'
 
 export function Feed(props) {
@@ -17,6 +18,19 @@ export function Feed(props) {
         }
         loadResponses();
     }, []);
+
+    useWebSocket(props.userName, (msg) => {
+        if (msg.type === 'new_response') {
+            setResponses(prev => {
+                const alreadyExists = prev.some(r => r.username === msg.username);
+                if (alreadyExists) return prev;
+                const userResponse = prev.find(r => r.username === props.userName);
+                const others = prev.filter(r => r.username !== props.userName);
+                const newResponse = { username: msg.username, text: msg.text, timestamp: msg.timestamp, reactions: { likes: [], laughs: [], cries: [] }, critiques: [] };
+                return userResponse ? [userResponse, newResponse, ...others] : [newResponse, ...others];
+            });
+        }
+    });
 
     async function handleEdit(newText) {
         const res = await fetch('/api/response/edit', {
