@@ -54,6 +54,11 @@ apiRouter.post('/auth/login', async (req, res) => {
     res.status(401).send({ msg: 'Invalid username or password' });
 });
 
+//GetAuthClean - get the currently logged in user
+apiRouter.get('/auth/me', verifyAuth, (req, res) => {
+    res.send({ username: req.user.username });
+});
+
 //DeleteAuth - logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
     const user = await DB.getUser('token', req.cookies[authCookieName]);

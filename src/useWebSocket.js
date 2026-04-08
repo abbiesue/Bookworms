@@ -5,8 +5,9 @@ export function useWebSocket(username, onMessage) {
     useEffect (() => {
         if (!username) return;
 
-        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-        ws.current = new WebSocket(`${protocol}://${window.location.host}`);
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const host = window.location.host || 'startup.bookwormprompts.com';
+        ws.current = new WebSocket(`${protocol}://${host}`);
 
         ws.current.onopen = () => {
             ws.current.send(JSON.stringify({ type: 'register', username }));

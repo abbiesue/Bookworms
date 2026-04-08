@@ -12,10 +12,24 @@ import { AuthState } from './login/authState';
 import { ResponseState } from './profile/responseState';
 
 export default function App() {
-  const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
-  const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
-  const [authState, setAuthState] = React.useState(currentAuthState);
+  const [userName, setUserName] = React.useState('');
+  const [authState, setAuthState] = React.useState(AuthState.Unknown);
   const [responseState, setResponseState] = React.useState(ResponseState.Unknown);
+
+  React.useEffect(() => {
+    async function checkAuth() {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        setUserName(data.username);
+        setAuthState(AuthState.Authenticated);
+      } else {
+        setAuthState(AuthState.Unauthenticated);
+      }
+    }
+    checkAuth();
+  },[]);
+
   React.useEffect(() => {
     async function checkResponseState() {
       if (authState !== AuthState.Authenticated) {
@@ -57,7 +71,6 @@ export default function App() {
                   <LogoutButton
                     userName={userName}
                     onLogout={() => {
-                      localStorage.removeItem('userName');
                       setUserName('');
                       setAuthState(AuthState.Unauthenticated);
                     }}
