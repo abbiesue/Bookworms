@@ -203,6 +203,7 @@ apiRouter.put('/response/edit', verifyAuth, verifyResponded, async (req, res) =>
     if (response) {
         if (response.date !== today) return res.status(403).send({ msg: 'Cannot edit a previous day\'s response' });
         await DB.updateResponseText(req.user.username, req.body.text);
+        broadcast({ type: 'edit_response', username: req.user.username, text: req.body.text, timestamp: new Date().toISOString() });
         res.send({ ...response, text: req.body.text });
     } else {
         res.status(404).send({ msg: 'Response not found' });
