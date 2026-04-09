@@ -30,6 +30,20 @@ export function Feed(props) {
                 return userResponse ? [userResponse, newResponse, ...others] : [newResponse, ...others];
             });
         }
+        else if (msg.type === 'edit_response') {
+            setResponses(prev => {
+                const edited = prev.find(r => r.username === msg.username);
+                if (!edited) return prev;
+                const updatedEdited = { ...edited, text: msg.text, timestamp: msg.timestamp };
+                const userResponse = prev.find(r => r.username === props.userName);
+                const rest = prev.filter(r => r.username !== msg.username && r.username !== props.userName);
+                if (msg.username === props.userName) {
+                    return [updatedEdited, ...rest];
+                } else {
+                    return userResponse ? [userResponse, updatedEdited, ...rest] : [updatedEdited, ...rest];
+                }
+            });
+        }
     });
 
     async function handleEdit(newText) {
@@ -39,11 +53,6 @@ export function Feed(props) {
             body: JSON.stringify({ text: newText }),
         });
         if (res.ok) {
-            const updated = await res.json();
-            setResponses(prev =>
-                prev.map(r => r.username === props.userName ? { ...r, text: updated.text } : r)
-            );
-            // re-evaluate bonuses since response text changed
             await fetch('/api/bonus/evaluate', { method: 'POST' });
         }
     }
