@@ -144,15 +144,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] **Stores data in MongoDB** - I store users, responses, auths, streak, and author level in the database for display/reference in the web app.
+- [x] **Stores credentials in MongoDB** - I stored my credientials and added them to my files (in gitIgnore).
 
 ## 🚀 WebSocket deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Backend listens for WebSocket connection** - The backend now listens for websocket connections and stores them in a clients map.
+- [x] **Frontend makes WebSocket connection** - The frontend makes connections whenever a response is posted, edited, reacted to, or critiqued to update the database and display that on the frontend.
+- [x] **Data sent over WebSocket connection** - The data of responses posted or created are sent over the connection. Notification data is also sent over the connection whenever someone reacts or critiques a user's post (that user is notified and prompted to refresh the page). 
+- [x] **WebSocket data displayed** - Responses are updated in the feed whenever they are posted/edited without the need of a refresh. Similarly, a notification is displayed on any page of a logged in user when someone reacts to or critiques their post. 
+- [x] **Application is fully functional** - The application is fully functional! Obviously, I have many ideas of places I can go from here, but currently there is no mockup/test data still being used or stored! 
