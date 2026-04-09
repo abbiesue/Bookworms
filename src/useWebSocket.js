@@ -2,6 +2,12 @@ import { useEffect, useRef } from 'react';
 
 export function useWebSocket(username, onMessage) {
     const ws = useRef(null);
+    const onMessageRef = useRef(onMessage);
+
+    useEffect(() => {
+        onMessageRef.current = onMessage;
+    });
+
     useEffect (() => {
         if (!username) return;
 
@@ -15,10 +21,10 @@ export function useWebSocket(username, onMessage) {
 
         ws.current.onmessage = (event) => { 
             const msg = JSON.parse(event.data);
-            onMessage(msg);
+            onMessageRef.current(msg);
         };
 
-        return () => ws.current.close();
+        return () => ws.current?.close();
     }, [username]);
 
 }

@@ -56,7 +56,7 @@ function getResponse(username) {
 
 async function getAllTodayResponses() {
     const today = new Date().toISOString().split('T')[0];
-    return responseCollection.find({date: today}).sort({timestamp: 1}).toArray();
+    return responseCollection.find({date: today}).sort({timestamp: -1}).toArray();
 }
 
 //add
