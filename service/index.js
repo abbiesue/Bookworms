@@ -243,7 +243,7 @@ apiRouter.post('/response/reaction', verifyAuth, verifyResponded,async (req, res
     const {responseAuthor, reactionType} = req.body;
     const panel = await DB.updateResponseReaction(responseAuthor, reactionType, req.user.username);
     if (!panel) return res.status(404).send({ msg: 'Response not found' });
-    sendTo(responseAuthor, { type: 'notification', message: `${req.user.username} reacted to your response! Refresh to see changes.` });
+    sendTo(responseAuthor, { type: 'notification', username: req.user.username, message: 'reacted to your response! Refresh to see changes.' });
     res.status(201).send(formatReactions(panel, req.user.username));
 });
 
@@ -257,7 +257,7 @@ apiRouter.post('/response/critique', verifyAuth, verifyResponded, async (req, re
     }
     const critiques = await DB.addCritique(responseAuthor, critiqueObj);
     if (!critiques) return res.status(404).send({ msg: 'Response not found' });
-    sendTo(responseAuthor, { type: 'notification', message: `${req.user.username} commented on your response! Refresh to see changes.` });
+    sendTo(responseAuthor, { type: 'notification', username: req.user.username, message: 'commented on your response! Refresh to see changes.' });
     res.send(critiques);
 });
 // ---------------------------------------------

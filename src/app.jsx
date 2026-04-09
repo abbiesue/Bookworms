@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
+import { useWebSocket } from './useWebSocket';
 
 import { BrowserRouter, NavLink, Route, Routes, useNavigate} from 'react-router-dom';
 import { Login } from './login/login';
@@ -15,6 +16,7 @@ export default function App() {
   const [userName, setUserName] = React.useState('');
   const [authState, setAuthState] = React.useState(AuthState.Unknown);
   const [responseState, setResponseState] = React.useState(ResponseState.Unknown);
+  const [notification, setNotification] = React.useState(null);
 
   React.useEffect(() => {
     async function checkAuth() {
@@ -58,10 +60,22 @@ export default function App() {
     fetchPrompt();
   }, [authState]);
 
+  useWebSocket(userName, (msg) => {
+    if (msg.type === 'notification') {
+      setNotification({ username: msg.username, message: msg.message });
+      setTimeout(() => setNotification(null), 5000);
+    }
+  });
+
 
   return (
     <BrowserRouter>
         <div className="app">
+          {notification && (
+            <div className="notification">
+              <span className="notificationUser">{notification.username}</span> {notification.message}
+            </div>
+          )}
             <header>
                 <h1 className="banner">
                   <img className="bannerImage" src="bannerBookworm.jpg" alt="Bookworms Banner"/>

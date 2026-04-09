@@ -69,6 +69,24 @@ header {
     padding: 0;
 }
 
+.notification {
+  position: fixed;
+  top: 8rem;
+  left: 1rem;
+  background-color: var(--medium-pink);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: fadeInOut 5s ease forwards;
+}
+
+.notificationUser {
+  color: var(--dark-pink);
+  font-weight: bold;
+}
+
 .userDisplay {
   position: absolute;
   top: 10px;
@@ -175,6 +193,13 @@ footer {
     100% {
         background-position: 100% 50%;
     }
+}
+
+@keyframes fadeInOut {
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 #dropFirst{
